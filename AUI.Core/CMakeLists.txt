@@ -4,9 +4,18 @@ AUI_Module(AUI.Core)
 
 find_package(ZLIB)
 
-#target_link_libraries(AUI.Core glm)
-target_include_directories(AUI.Core PRIVATE 3rdparty/glm)
-target_link_libraries(AUI.Core ZLIB::ZLIB)
+
+get_filename_component(GLM_INCLUDE_DIR 3rdparty/glm REALPATH BASE_DIR ${CMAKE_SOURCE_DIR}/AUI.Core)
+target_include_directories(AUI.Core PUBLIC $<BUILD_INTERFACE:${GLM_INCLUDE_DIR}>)
+target_link_libraries(AUI.Core PRIVATE ZLIB::ZLIB)
+
+
+
+install(
+		DIRECTORY ${GLM_INCLUDE_DIR}
+		DESTINATION "include/"
+)
+
 
 if (UNIX)
 	SET(CMAKE_CXX_FLAGS -pthread)
