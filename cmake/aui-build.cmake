@@ -64,8 +64,6 @@ function(AUI_Common AUI_MODULE_NAME)
 endfunction(AUI_Common)
 
 function(AUI_Executable AUI_MODULE_NAME)
-    project(${AUI_MODULE_NAME})
-
     file(GLOB_RECURSE SRCS ${CMAKE_CURRENT_BINARY_DIR}/autogen/*.cpp src/*.cpp src/*.c src/*.h)
     #message("ASSDIR ${CMAKE_CURRENT_BINARY_DIR}/autogen/*.cpp")
     if(ANDROID)
