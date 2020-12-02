@@ -33,16 +33,29 @@ function(AUI_Module AUI_MODULE_NAME)
 
 	AUI_Common(${AUI_MODULE_NAME})
 
-	install(
-			TARGETS ${AUI_MODULE_NAME}
-			EXPORT AUI
-			ARCHIVE
+	if (MSVC)
+		install(
+				TARGETS ${AUI_MODULE_NAME}
+				EXPORT AUI
+				ARCHIVE
+					DESTINATION "lib"
+				RUNTIME
+					DESTINATION "bin"
+				LIBRARY
+					DESTINATION "bin"
+		)
+	else()
+		install(
+				TARGETS ${AUI_MODULE_NAME}
+				EXPORT AUI
+				ARCHIVE
 				DESTINATION "lib"
-			RUNTIME
+				RUNTIME
+				DESTINATION "lib"
+				LIBRARY
 				DESTINATION "bin"
-			LIBRARY
-				DESTINATION "bin"
-	)
+		)
+	endif()
 	install(
 			DIRECTORY src/
 			DESTINATION "include/"

@@ -765,7 +765,7 @@ void AWindow::redraw() {
                 v = shared_from_this();
             apply(v, {
                 RenderHints::PushMatrix m;
-                Render::instance().setTransform(glm::translate(glm::mat4(1.f), {getPositionInWindow(), 0.f}));
+                Render::instance().setTransform(glm::translate(glm::mat4(1.f), glm::vec3{getPositionInWindow(), 0.f}));
                 Render::instance().setFill(Render::FILL_SOLID);
                 glEnable(GL_STENCIL_TEST);
                 glStencilMask(0xff);
@@ -1266,6 +1266,7 @@ glm::ivec2 AWindow::mapPositionTo(const glm::ivec2& position, _<AWindow> other) 
 }
 
 void AWindow::setIcon(const AImage& image) {
+#ifdef _WIN32
     assert(image.getFormat() & AImage::BYTE);
 
     if (mIcon) {
@@ -1312,6 +1313,7 @@ void AWindow::setIcon(const AImage& image) {
     ReleaseDC(NULL, hdcScreen);
 
     SendMessage(mHandle, WM_SETICON, ICON_BIG, (LPARAM)mIcon);
+#endif
 }
 
 // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ для XLIB
