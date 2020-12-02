@@ -13,7 +13,7 @@ define_property(GLOBAL PROPERTY TESTS_DEPS
 set_property(GLOBAL PROPERTY TESTS_SRCS "")
 
 
-include(cmake/aui-build.cmake)
+include(cmake/b.cmake)
 
 function(AUI_Module AUI_MODULE_NAME)
 	project(${AUI_MODULE_NAME})
@@ -26,7 +26,7 @@ function(AUI_Module AUI_MODULE_NAME)
 	# AUI.Core -> BUILD_AUI_CORE
 	string(REPLACE "." "_" BUILD_DEF_NAME ${AUI_MODULE_NAME})
 	string(TOUPPER "API_${BUILD_DEF_NAME}" BUILD_DEF_NAME)
-	target_compile_definitions(${AUI_MODULE_NAME} PUBLIC ${BUILD_DEF_NAME}=AUI_IMPORT)
+	target_compile_definitions(${AUI_MODULE_NAME} INTERFACE ${BUILD_DEF_NAME}=AUI_IMPORT)
 	target_compile_definitions(${AUI_MODULE_NAME} PRIVATE ${BUILD_DEF_NAME}=AUI_EXPORT)
 
 	AUI_Add_Properties(${AUI_MODULE_NAME})
@@ -36,7 +36,12 @@ function(AUI_Module AUI_MODULE_NAME)
 	install(
 			TARGETS ${AUI_MODULE_NAME}
 			EXPORT AUI
-			DESTINATION "lib"
+			ARCHIVE
+				DESTINATION "lib"
+			RUNTIME
+				DESTINATION "bin"
+			LIBRARY
+				DESTINATION "bin"
 	)
 	install(
 			DIRECTORY src/
@@ -64,29 +69,34 @@ add_subdirectory(AUI.Toolbox)
 
 if(NOT ANDROID)
 	#add_subdirectory(examples/AUI.Example.Sowlonya)
-	add_subdirectory(examples/AUI.Example.Views)
+	#add_subdirectory(examples/AUI.Example.Views)
 	#add_subdirectory(examples/AUI.Example.Notes)
-	add_subdirectory(examples/AUI.Example.Words)
+	#add_subdirectory(examples/AUI.Example.Words)
 endif()
 
 get_property(TESTS_SRCS GLOBAL PROPERTY TESTS_SRCS)
 
 if (NOT ANDROID)
 	AUI_Tests(Tests ${TESTS_SRCS})
-	get_property(TESTS_DEPS GLOBAL PROPERTY TESTS_DEPS)
-	foreach(child ${TESTS_DEPS})
-		target_link_libraries(Tests PRIVATE ${child})
-	endforeach()
+	if (TARGET Tests)
+		get_property(TESTS_DEPS GLOBAL PROPERTY TESTS_DEPS)
+		foreach(child ${TESTS_DEPS})
+			target_link_libraries(Tests PRIVATE ${child})
+		endforeach()
+	endif()
 endif()
 
 
 ## INSTALL
 install(
 		FILES
-			cmake/aui-config.cmake
+			cmake/c.cmake
+		RENAME aui-config.cmake
 		DESTINATION ".")
 install(
 		FILES
-			cmake/aui-build.cmake
-		DESTINATION "cmake")
-install(EXPORT AUI DESTINATION "cmake")
+			cmake/b.cmake
+		RENAME aui-build.cmake
+		DESTINATION "cmake/")
+install(EXPORT AUI DESTINATION "cmake/")
+

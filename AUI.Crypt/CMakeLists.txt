@@ -9,7 +9,7 @@ if (OPENSSL_FOUND)
 	target_include_directories(AUI.Crypt PUBLIC ${OPENSSL_INCLUDE_DIR})
 
 	if(MSVC)
-		target_link_libraries(AUI.Crypt ${OPENSSL_LIBRARIES})
+		target_link_libraries(AUI.Crypt ${OPENSSL_LIBRARIES} crypt32 wsock32 ws2_32)
 	else()
 		target_link_libraries(AUI.Crypt ssl crypto)
 	endif()

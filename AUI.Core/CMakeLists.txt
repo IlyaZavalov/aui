@@ -12,7 +12,7 @@ target_link_libraries(AUI.Core PRIVATE ZLIB::ZLIB)
 
 
 install(
-		DIRECTORY ${GLM_INCLUDE_DIR}
+		DIRECTORY ${GLM_INCLUDE_DIR}/glm
 		DESTINATION "include/"
 )
 
