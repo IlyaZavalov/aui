@@ -183,11 +183,11 @@ APath APath::absolute() const {
 #else
     char buf[0x1000];
     if (realpath(toStdString().c_str(), buf) == nullptr) {
-#endif
         throw IOException("could not find absolute file" + *this ERROR_DESCRIPTION);
     }
 
     return buf;
+#endif
 }
 
 const APath& APath::makeDir() const {

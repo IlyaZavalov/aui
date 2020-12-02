@@ -36,7 +36,7 @@ function(AUI_Add_Properties AUI_MODULE_NAME)
     if(NOT ANDROID)
         set_target_properties(${AUI_MODULE_NAME} PROPERTIES
                 ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-                LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+                LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
                 RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
     endif()
 endfunction(AUI_Add_Properties)
