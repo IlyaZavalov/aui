@@ -132,8 +132,27 @@ function(AUI_Compile_Assets AUI_MODULE_NAME)
     else()
         get_target_property(TARGET_DIR ${AUI_MODULE_NAME} ARCHIVE_OUTPUT_DIRECTORY)
     endif()
-    set(CMD_STRING AUI.Toolbox pack ${CMAKE_CURRENT_SOURCE_DIR}/assets ${CMAKE_CURRENT_BINARY_DIR}/autogen)
-    add_custom_target(TARGET ${AUI_MODULE_NAME} PRE_BUILD COMMAND ${CMD_STRING})
+
+
+    get_filename_component(SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+    file(GLOB_RECURSE ASSETS RELATIVE ${SELF_DIR} "assets/*")
+
+    if (TARGET AUI.Toolbox)
+        set(AUI_TOOLBOX_EXE $<TARGET_FILE:AUI.Toolbox>)
+    else()
+        set(AUI_TOOLBOX_EXE AUI.Toolbox)
+    endif()
+
+    foreach(ASSET_PATH ${ASSETS})
+        string(MD5 OUTPUT_PATH ${ASSET_PATH})
+        set(OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/autogen/${OUTPUT_PATH}.cpp")
+        add_custom_command(
+                OUTPUT ${OUTPUT_PATH}
+                COMMAND ${AUI_TOOLBOX_EXE} pack ${SELF_DIR}/assets ${SELF_DIR}/${ASSET_PATH} ${OUTPUT_PATH}
+                DEPENDS ${SELF_DIR}/${ASSET_PATH}
+        )
+        target_sources(${AUI_MODULE_NAME} PRIVATE ${OUTPUT_PATH})
+    endforeach()
     if(NOT ANDROID)
         if (TARGET AUI.Toolbox)
             add_dependencies(${AUI_MODULE_NAME} AUI.Toolbox)
