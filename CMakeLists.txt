@@ -37,11 +37,11 @@ function(AUI_Module AUI_MODULE_NAME)
 			TARGETS ${AUI_MODULE_NAME}
 			EXPORT AUI
 			ARCHIVE
-			DESTINATION "lib"
-			RUNTIME
-			DESTINATION "bin"
+				DESTINATION "lib"
 			LIBRARY
-			DESTINATION "bin"
+				DESTINATION "lib"
+			RUNTIME
+				DESTINATION "bin"
 	)
 	install(
 			DIRECTORY src/
