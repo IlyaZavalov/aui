@@ -17,7 +17,7 @@ if (OPENGL_FOUND)
 
 			include_directories (${GTK3_INCLUDE_DIRS})
 			link_directories (${GTK3_LIBRARY_DIRS})
-			target_link_libraries(AUI.Views gtk-3)
+			target_link_libraries(AUI.Views PRIVATE gtk-3)
 		endif (UNIX)
 	endif()
 

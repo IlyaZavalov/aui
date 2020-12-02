@@ -19,9 +19,9 @@ install(
 
 if (UNIX)
 	SET(CMAKE_CXX_FLAGS -pthread)
-	target_link_libraries(AUI.Core dl)
+	target_link_libraries(AUI.Core PRIVATE dl)
 endif()
 if (ANDROID)
 	find_library(log-lib log)
-	target_link_libraries(AUI.Core ${log-lib})
+	target_link_libraries(AUI.Core PRIVATE ${log-lib})
 endif()
