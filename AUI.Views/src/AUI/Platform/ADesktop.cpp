@@ -4,7 +4,7 @@
 
 #if defined(_WIN32)
 
-#include <Windows.h>
+#include <windows.h>
 #include <Shlobj.h>
 #include <AUI/Traits/memory.h>
 #include <AUI/Util/kAUI.h>

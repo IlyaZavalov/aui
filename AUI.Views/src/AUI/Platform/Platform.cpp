@@ -3,7 +3,7 @@
 #include "AUI/IO/APath.h"
 
 #if defined(_WIN32)
-#include <Windows.h>
+#include <windows.h>
 
 AString Platform::getFontPath(const AString& font)
 {

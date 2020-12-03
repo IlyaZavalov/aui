@@ -5,7 +5,7 @@
 #include "AClipboard.h"
 
 #ifdef _WIN32
-#include <Windows.h>
+#include <windows.h>
 
 void AClipboard::copyToClipboard(const AString& text) {
     const size_t len = text.length() * 2 + 2;

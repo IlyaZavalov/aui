@@ -2,7 +2,7 @@
 #include <AUI/Image/Drawables.h>
 #include <AUI/Util/ImageDrawable.h>
 #if defined(_WIN32)
-#include <Windows.h>
+#include <windows.h>
 #include <AUI/Url/AUrl.h>
 
 

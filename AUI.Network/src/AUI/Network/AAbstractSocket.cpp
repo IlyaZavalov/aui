@@ -10,7 +10,7 @@
 
 #if defined(_WIN32)
 #include <WS2tcpip.h>
-#include <Windows.h>
+#include <windows.h>
 #include <AUI/Logging/ALogger.h>
 
 void aui_wsa_init()
