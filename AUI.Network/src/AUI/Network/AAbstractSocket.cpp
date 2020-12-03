@@ -9,7 +9,7 @@
 
 
 #if defined(_WIN32)
-#include <WS2tcpip.h>
+#include <ws2tcpip.h>
 #include <windows.h>
 #include <AUI/Logging/ALogger.h>
 
