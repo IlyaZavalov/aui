@@ -5,7 +5,7 @@
 #if defined(_WIN32)
 
 #include <windows.h>
-#include <Shlobj.h>
+#include <shlobj.h>
 #include <AUI/Traits/memory.h>
 #include <AUI/Util/kAUI.h>
 #include <AUI/Logging/ALogger.h>

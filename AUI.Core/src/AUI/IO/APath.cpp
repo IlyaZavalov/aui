@@ -227,8 +227,8 @@ void APath::removeBackSlashes() {
 }
 
 #ifdef _WIN32
-#include <ShlObj_core.h>
-#include <ShlObj.h>
+#include <shlobj_core.h>
+#include <shlobj.h>
 
 APath APath::getDefaultPath(APath::DefaultPath path) {
     APath result;
