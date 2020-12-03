@@ -4,6 +4,10 @@ cmake_minimum_required(VERSION 3.10)
 
 ADD_DEFINITIONS(-DUNICODE)
 
+# mingw winver fix
+if (MINGW)
+    add_compile_definitions(WINVER=0x601)
+endif()
 
 set(AUI_3RDPARTY_LIBS_DIR NOTFOUND CACHE PATH "")
 if (AUI_3RDPARTY_LIBS_DIR)
