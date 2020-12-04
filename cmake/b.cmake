@@ -141,7 +141,7 @@ function(AUI_Compile_Assets AUI_MODULE_NAME)
     get_filename_component(SELF_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
     file(GLOB_RECURSE ASSETS RELATIVE ${SELF_DIR} "assets/*")
 
-    if (TARGET AUI.Toolbox)
+    if (TARGET AUI.Toolbox AND NOT CMAKE_CROSSCOMPILING)
         set(AUI_TOOLBOX_EXE $<TARGET_FILE:AUI.Toolbox>)
     else()
         set(AUI_TOOLBOX_EXE AUI.Toolbox)
