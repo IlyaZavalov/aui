@@ -406,7 +406,7 @@ AWindow::AWindow(const AString& name, int width, int height, AWindow* parent, Wi
                              GetSystemMetrics(SM_CYSCREEN) / 2 - height / 2, width, height,
                              parent != nullptr ? parent->mHandle : nullptr, nullptr, mInst, nullptr);
 
-    SetWindowLongPtr(mHandle, GWLP_USERDATA, reinterpret_cast<LONG>(this));
+    SetWindowLongPtr(mHandle, GWLP_USERDATA, reinterpret_cast<long long int>(this));
 
     if (mParentWindow && ws & WS_DIALOG) {
         EnableWindow(mParentWindow->mHandle, false);
