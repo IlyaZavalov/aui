@@ -70,7 +70,7 @@ void AAbstractSocket::init()
 AString AAbstractSocket::getErrorString()
 {
 #if defined(_WIN32)
-	long error = WSAGetLastError();
+	int error = WSAGetLastError();
 	wchar_t* str;
 	FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, static_cast<DWORD>(error), 0,
 	               (LPWSTR)&str, 0, nullptr);
