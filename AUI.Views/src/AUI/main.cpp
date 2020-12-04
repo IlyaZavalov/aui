@@ -34,10 +34,6 @@ BOOL WINAPI DllMain(
 	return TRUE;  // Successful DLL_PROCESS_ATTACH.
 }
 
-#ifndef DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
-#define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2  0xfffffffc
-#endif
-
 #elif defined(ANDROID)
 #else
 #include <gtk/gtk.h>
@@ -57,14 +53,19 @@ struct initialize
         });
 
 #ifndef ANDROID
-        aui::importPlugin("Svg");
+        try {
+            aui::importPlugin("Svg");
+        } catch (...) {
+
+        }
 #endif
 #ifdef _WIN32
-        typedef BOOL(WINAPI *SetProcessDpiAwarenessContext_t)(int*);
+        typedef BOOL(WINAPI *SetProcessDpiAwarenessContext_t)(HANDLE);
         auto SetProcessDpiAwarenessContext = (SetProcessDpiAwarenessContext_t)GetProcAddress(GetModuleHandleA("User32.dll"), "SetProcessDpiAwarenessContext");
 
         if (SetProcessDpiAwarenessContext) {
-            SetProcessDpiAwarenessContext((int*)DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            // DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2
+            SetProcessDpiAwarenessContext((HANDLE) -4);
         }
 #endif
     }
