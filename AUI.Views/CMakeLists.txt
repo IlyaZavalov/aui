@@ -35,7 +35,7 @@ if (OPENGL_FOUND)
 		target_link_libraries(AUI.Views PRIVATE Freetype::Freetype)
 		target_link_libraries(AUI.Views PUBLIC OpenGL::GL)
 
-		if(MSVC)
+		if(WIN32)
 			target_link_libraries(AUI.Views PUBLIC GLEW::glew_s)
 			target_link_libraries(AUI.Views PRIVATE dwmapi)
 			target_link_libraries(AUI.Views PRIVATE Winmm)
