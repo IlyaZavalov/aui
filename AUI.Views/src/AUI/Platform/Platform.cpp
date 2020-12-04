@@ -68,7 +68,12 @@ void Platform::playSystemSound(Sound s)
 
 float Platform::getDpiRatio()
 {
-	return GetDpiForSystem() / 96.f * AViews::DPI_RATIO;
+    typedef UINT(*GetDpiForSystemType)();
+    static auto GetDpiForSystem = (GetDpiForSystemType)GetProcAddress(nullptr, "GetDpiForSystem");
+	if (GetDpiForSystem) {
+        return GetDpiForSystem() / 96.f * AViews::DPI_RATIO;
+    }
+	return 1.f;
 }
 #else
 

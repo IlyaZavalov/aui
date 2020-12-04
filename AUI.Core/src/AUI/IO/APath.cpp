@@ -36,6 +36,15 @@ AString APath::filename() const {
     return mid(i + 1);
 }
 
+AString APath::filenameWithoutExtension() const {
+    auto name = filename();
+    auto it = name.rfind('.');
+    if (it == NPOS) {
+        return name;
+    }
+    return name.mid(0, it);
+}
+
 APath APath::file(const AString& fileName) const {
     return ensureSlashEnding() + fileName;
 }
