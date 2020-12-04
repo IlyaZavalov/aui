@@ -179,7 +179,7 @@ LRESULT AWindow::winProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                         return true;
                     }
                     case ACursor::POINTER: {
-                        static auto cursor = LoadCursor(nullptr, IDC_PERSON);
+                        static auto cursor = LoadCursor(nullptr, IDC_HAND);
                         SetCursor(cursor);
                         return true;
                     }
@@ -221,8 +221,14 @@ LRESULT AWindow::winProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             return 0;
 
         case WM_DPICHANGED: {
-            float newDpi = GetDpiForWindow(mHandle) / 96.f * AViews::DPI_RATIO;
-
+            typedef UINT(WINAPI *GetDpiForWindow_t)(_In_ HWND);
+            static auto GetDpiForWindow = (GetDpiForWindow_t)GetProcAddress(GetModuleHandleA("User32.dll"), "GetDpiForWindow");
+            float newDpi;
+            if (GetDpiForWindow) {
+                newDpi = GetDpiForWindow(mHandle) / 96.f;
+            } else {
+                newDpi = Platform::getDpiRatio();
+            }
             setSize(getWidth() * newDpi / mDpiRatio, getHeight() * newDpi / mDpiRatio);
             mDpiRatio = newDpi;
             updateDpi();
@@ -919,7 +925,13 @@ void AWindow::close() {
 void AWindow::updateDpi() {
     emit dpiChanged;
 #if defined(_WIN32)
-    mDpiRatio = GetDpiForWindow(mHandle) / 96.f * AViews::DPI_RATIO;
+    typedef UINT(WINAPI *GetDpiForWindow_t)(_In_ HWND);
+    static auto GetDpiForWindow = (GetDpiForWindow_t)GetProcAddress(GetModuleHandleA("User32.dll"), "GetDpiForWindow");
+    if (GetDpiForWindow) {
+        mDpiRatio = GetDpiForWindow(mHandle) / 96.f;
+    } else {
+        mDpiRatio = Platform::getDpiRatio();
+    }
 #else
     mDpiRatio = Platform::getDpiRatio();
 #endif

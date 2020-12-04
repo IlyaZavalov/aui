@@ -68,10 +68,10 @@ void Platform::playSystemSound(Sound s)
 
 float Platform::getDpiRatio()
 {
-    typedef UINT(*GetDpiForSystemType)();
-    static auto GetDpiForSystem = (GetDpiForSystemType)GetProcAddress(nullptr, "GetDpiForSystem");
+    typedef UINT(WINAPI *GetDpiForSystem_t)();
+    static auto GetDpiForSystem = (GetDpiForSystem_t)GetProcAddress(GetModuleHandleA("User32.dll"), "GetDpiForSystem");
 	if (GetDpiForSystem) {
-        return GetDpiForSystem() / 96.f * AViews::DPI_RATIO;
+        return GetDpiForSystem() / 96.f;
     }
 	return 1.f;
 }
