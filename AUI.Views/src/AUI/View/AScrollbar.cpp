@@ -17,40 +17,64 @@ public:
     AScrollbarHandle() {
         AVIEW_CSS;
     }
+
+    int getMinimumWidth() override {
+        return 0;
+    }
+
+    int getMinimumHeight() override {
+        return 0;
+    }
+};
+class AScrollbarOffsetSpacer: public ASpacer {
+public:
+    AScrollbarOffsetSpacer(): ASpacer(0, 0) {
+
+    }
+
+    int getMinimumWidth() override {
+        return 0;
+    }
+
+    int getMinimumHeight() override {
+        return 0;
+    }
 };
 
 AScrollbar::AScrollbar(LayoutDirection direction) : mDirection(direction) {
     AVIEW_CSS;
-    auto forwardButton = _new<AScrollbarButton>();
-    auto backwardButton = _new<AScrollbarButton>();
+    mForwardButton = _new<AScrollbarButton>();
+    mBackwardButton = _new<AScrollbarButton>();
 
     switch (direction) {
         case LayoutDirection::HORIZONTAL:
             setLayout(_new<AHorizontalLayout>());
-            forwardButton->setCss("background: url(':win/svg/sb-right.svg');"
+            mForwardButton->setCss("background: url(':win/svg/sb-right.svg');"
                                   "width: 17em;"
                                   "height: 15em;");
-            backwardButton->setCss("background: url(':win/svg/sb-left.svg');"
+            mBackwardButton->setCss("background: url(':win/svg/sb-left.svg');"
                                    "width: 17em;"
                                    "height: 15em;");
             break;
         case LayoutDirection::VERTICAL:
             setLayout(_new<AVerticalLayout>());
-            forwardButton->setCss("background: url(':win/svg/sb-down.svg');"
+            mForwardButton->setCss("background: url(':win/svg/sb-down.svg');"
                                   "width: 15em;"
                                   "height: 17em;");
-            backwardButton->setCss("background: url(':win/svg/sb-top.svg');"
+            mBackwardButton->setCss("background: url(':win/svg/sb-top.svg');"
                                    "width: 15em;"
                                    "height: 17em;");
             break;
     }
     mHandle = _new<AScrollbarHandle>();
 
-    addView(backwardButton);
-    addView(mOffsetSpacer = _new<ASpacer>() let (ASpacer, {setMinimumSize({0, 0});}));
+    addView(mBackwardButton);
+    addView(mOffsetSpacer = _new<AScrollbarOffsetSpacer>() let (ASpacer, {setMinimumSize({0, 0});}));
     addView(mHandle);
     addView(_new<ASpacer>() let (ASpacer, {setMinimumSize({0, 0});}));
-    addView(forwardButton);
+    addView(mForwardButton);
+
+    setScroll(0);
 }
 
 void AScrollbar::setOffset(size_t o) {
@@ -72,5 +96,53 @@ void AScrollbar::setScrollDimensions(size_t viewportSize, size_t fullSize) {
 }
 
 void AScrollbar::updateScrollHandleSize() {
-    mHandle->setSize()
+    float scrollbarSpace = 0;
+
+    switch (mDirection) {
+        case LayoutDirection::HORIZONTAL:
+            scrollbarSpace = getWidth() + mBackwardButton->getTotalOccupiedWidth() + mForwardButton->getTotalOccupiedWidth() + mHandle->getMargin().horizontal();
+            break;
+        case LayoutDirection::VERTICAL:
+            scrollbarSpace = getHeight() + mBackwardButton->getTotalOccupiedHeight() + mForwardButton->getTotalOccupiedHeight() + mHandle->getMargin().vertical();
+            break;
+    }
+
+    size_t o = glm::max(10_dp, scrollbarSpace * mViewportSize / mFullSize);
+
+    if (o < scrollbarSpace) {
+        setEnabled();
+        mHandle->setVisibility(V_VISIBLE);
+        switch (mDirection) {
+            case LayoutDirection::HORIZONTAL:
+                mHandle->setFixedSize({o, mHandle->getHeight()});
+                break;
+            case LayoutDirection::VERTICAL:
+                mHandle->setFixedSize({mHandle->getWidth(), o});
+                break;
+        }
+    } else {
+        mHandle->setVisibility(V_GONE);
+        setDisabled();
+    }
+}
+
+void AScrollbar::setScroll(size_t scroll) {
+    auto newScroll = glm::min(scroll, mFullSize - mViewportSize);
+    if (mCurrentScroll != newScroll) {
+        switch (mDirection) {
+            case LayoutDirection::HORIZONTAL:
+                mOffsetSpacer->setFixedSize({scroll, 0});
+                break;
+            case LayoutDirection::VERTICAL:
+                mOffsetSpacer->setFixedSize({0, scroll});
+                break;
+        }
+        redraw();
+        emit scrolled(mCurrentScroll);
+    }
+}
+
+void AScrollbar::onMouseWheel(glm::ivec2 pos, int delta) {
+    AViewContainer::onMouseWheel(pos, delta);
+    setScroll(mCurrentScroll + delta);
 }

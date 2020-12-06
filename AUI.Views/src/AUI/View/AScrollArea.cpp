@@ -5,23 +5,42 @@
 #include "AScrollArea.h"
 #include <AUI/Layout/AAdvancedGridLayout.h>
 #include <AUI/Util/AMetric.h>
+#include <AUI/Util/kAUI.h>
 
 class AScrollAreaContainer: public AViewContainer {
+private:
+    size_t mScroll = 0;
+
 public:
 
     int getContentMinimumWidth() override {
         return 30_dp;
     }
 
+    void updateLayout() override {
+        if (auto l = getLayout())
+            l->onResize(mPadding.left, mPadding.top - mScroll,
+                              getSize().x - mPadding.horizontal(), getSize().y - mPadding.vertical());
+        updateParentsLayoutIfNecessary();
+    }
+
     int getContentMinimumHeight() override {
         return 30_dp;
+    }
+
+    void setScrollY(size_t scroll) {
+        mScroll = scroll;
+        updateLayout();
     }
 
 };
 
 AScrollArea::AScrollArea() {
     setLayout(_new<AAdvancedGridLayout>(2, 2));
-    addView(mContentContainer = _new<AScrollAreaContainer>());
+
+    auto contentContainer = _new<AScrollAreaContainer>();
+    mContentContainer = contentContainer;
+    addView(contentContainer);
     addView(mVerticalScrollbar = _new<AScrollbar>(LayoutDirection::VERTICAL));
     addView(mHorizontalScrollbar = _new<AScrollbar>(LayoutDirection::HORIZONTAL));
 
@@ -29,9 +48,19 @@ AScrollArea::AScrollArea() {
     mContentContainer->setExpanding({2, 2});
 
     setExpanding({2, 2});
+
+
+    connect(mVerticalScrollbar->scrolled, slot(contentContainer)::setScrollY);
 }
+
+AScrollArea::~AScrollArea() = default;
 
 void AScrollArea::setSize(int width, int height) {
     AViewContainer::setSize(width, height);
-    mVerticalScrollbar->setScrollDimensions(mContentContainer->getHeight(), mContentContainer->getMinimumHeight())
+    mVerticalScrollbar->setScrollDimensions(mContentContainer->getContentHeight(), mContentContainer->AViewContainer::getContentMinimumHeight());
+}
+
+void AScrollArea::onMouseWheel(glm::ivec2 pos, int delta) {
+    AViewContainer::onMouseWheel(pos, delta);
+    mVerticalScrollbar->onMouseWheel(pos, delta);
 }

@@ -202,6 +202,9 @@ LRESULT AWindow::winProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             onMousePressed(POS, AInput::LButton);
             SetCapture(mHandle);
             return 0;
+        case WM_MOUSEWHEEL :
+            onMouseWheel(mapPosition(POS), GET_WHEEL_DELTA_WPARAM(wParam));
+            return 0;
         case WM_LBUTTONUP: {
             onMouseReleased(POS, AInput::LButton);
             ReleaseCapture();

@@ -44,6 +44,7 @@ BOOL WINAPI DllMain(
 #include "AUI/Common/Plugin.h"
 #include "AUI/Util/BuiltinFiles.h"
 #include "Render/Stylesheet.h"
+#include <AUI/Logging/ALogger.h>
 
 
 

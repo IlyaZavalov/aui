@@ -12,12 +12,14 @@ private:
 
 public:
     AScrollArea();
-    virtual ~AScrollArea() = default;
+    virtual ~AScrollArea();
 
     const _<AViewContainer>& getContentContainer() const {
         return mContentContainer;
     }
 
     void setSize(int width, int height) override;
+
+    void onMouseWheel(glm::ivec2 pos, int delta) override;
 };
 
