@@ -65,6 +65,7 @@ AMessageBox::show(AWindow *parent, const AString &title, const AString &message,
 #include <gtk/gtk.h>
 #include "AMessageBox.h"
 #include "AWindow.h"
+#include <AUI/Util/kAUI.h>
 
 AMessageBox::Button
 AMessageBox::show(AWindow *parent, const AString &title, const AString &message, AMessageBox::Icon icon,

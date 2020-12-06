@@ -7,16 +7,21 @@
 #include <AUI/Platform/ACustomCaptionWindow.h>
 #include <AUI/Designer/DesignerRegistrator.h>
 #include <View/FakeWindow.h>
+#include <AUI/View/AScrollArea.h>
 
 DesignerWindow::DesignerWindow():
     AWindow("AUI Designer")
 {
     setLayout(_new<AStackedLayout>());
 
-    auto componentsList = _container<AVerticalLayout>({});
+    auto componentsList = _new<AScrollArea>();
 
-    for (auto& c : aui::detail::DesignerRegistrationBase::getRegistrations()) {
-        componentsList->addView(c->instanciate());
+    componentsList->getContentContainer()->setLayout(_new<AVerticalLayout>());
+
+    repeat(10) {
+        for (auto& c : aui::detail::DesignerRegistrationBase::getRegistrations()) {
+            componentsList->getContentContainer()->addView(c->instanciate());
+        }
     }
 
     addView(_container<AVerticalLayout>({
