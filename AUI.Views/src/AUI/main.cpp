@@ -50,12 +50,12 @@ struct initialize
     initialize() {
 #ifndef ANDROID
         try {
-            aui::importPlugin("Svg");
+            aui::importPlugin("svg");
         } catch (const AException& e) {
             ALogger::warn("Could not load Svg plugin:" + e.getMessage());
         }
         try {
-            aui::importPlugin("Image");
+            aui::importPlugin("image");
         } catch (const AException& e) {
             ALogger::warn("Could not load Image plugin:" + e.getMessage());
         }
