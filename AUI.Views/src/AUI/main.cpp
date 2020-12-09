@@ -54,6 +54,11 @@ struct initialize
         } catch (const AException& e) {
             ALogger::warn("Could not load Svg plugin:" + e.getMessage());
         }
+        try {
+            aui::importPlugin("Image");
+        } catch (const AException& e) {
+            ALogger::warn("Could not load Image plugin:" + e.getMessage());
+        }
 #endif
 #ifdef _WIN32
         typedef BOOL(WINAPI *SetProcessDpiAwarenessContext_t)(HANDLE);

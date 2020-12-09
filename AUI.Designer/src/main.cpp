@@ -53,7 +53,7 @@ DESIGNER_REGISTRATION(AScrollbar, {
 
 AUI_ENTRY
 {
-    Stylesheet::instance().load(AUrl(":style.less").open());
+    Stylesheet::inst().load(AUrl(":style.less").open());
     _new<DesignerWindow>()->show();
 
 	return 0;
