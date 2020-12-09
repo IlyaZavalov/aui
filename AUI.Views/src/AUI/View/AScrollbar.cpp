@@ -149,5 +149,5 @@ void AScrollbar::setScroll(int scroll) {
 
 void AScrollbar::onMouseWheel(glm::ivec2 pos, int delta) {
     AViewContainer::onMouseWheel(pos, delta);
-    setScroll(mCurrentScroll + delta);
+    setScroll(mCurrentScroll - delta / 2);
 }

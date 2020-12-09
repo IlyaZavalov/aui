@@ -1492,10 +1492,10 @@ void AWindowManager::loop() {
                                                        (AInput::Key) (AInput::LButton + ev.xbutton.button - 1));
                                 break;
                             case 4: // wheel down
-                                window->onMouseWheel({ev.xbutton.x, ev.xbutton.y}, -20_dp);
+                                window->onMouseWheel({ev.xbutton.x, ev.xbutton.y}, 100_dp);
                                 break;
                             case 5: // wheel up
-                                window->onMouseWheel({ev.xbutton.x, ev.xbutton.y}, 20_dp);
+                                window->onMouseWheel({ev.xbutton.x, ev.xbutton.y}, -100_dp);
                                 break;
                         }
                         break;
