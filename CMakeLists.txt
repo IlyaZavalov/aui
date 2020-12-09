@@ -65,6 +65,7 @@ add_subdirectory(AUI.Svg)
 add_subdirectory(AUI.Image)
 add_subdirectory(AUI.Xml)
 add_subdirectory(AUI.Toolbox)
+add_subdirectory(AUI.Designer)
 
 
 if(NOT ANDROID)

@@ -34,11 +34,14 @@ BOOL WINAPI DllMain(
 #elif defined(ANDROID)
 #else
 #include <gtk/gtk.h>
+#include <AUI/Logging/ALogger.h>
+
 #endif
 
 #include "AUI/Common/Plugin.h"
 #include "AUI/Util/BuiltinFiles.h"
 #include "Render/Stylesheet.h"
+#include <AUI/Logging/ALogger.h>
 
 
 
@@ -48,8 +51,8 @@ struct initialize
 #ifndef ANDROID
         try {
             aui::importPlugin("Svg");
-        } catch (...) {
-
+        } catch (const AException& e) {
+            ALogger::warn("Could not load Svg plugin:" + e.getMessage());
         }
 #endif
 #ifdef _WIN32
