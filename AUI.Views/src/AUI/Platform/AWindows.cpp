@@ -1479,14 +1479,28 @@ void AWindowManager::loop() {
                     }
                     case ButtonPress: {
                         window = locateWindow(ev.xbutton.window);
-                        window->onMousePressed({ev.xbutton.x, ev.xbutton.y},
-                                               (AInput::Key) (AInput::LButton + ev.xbutton.button - 1));
+                        switch (ev.xbutton.button) {
+                            case 1:
+                            case 2:
+                            case 3:
+                                window->onMousePressed({ev.xbutton.x, ev.xbutton.y},
+                                                       (AInput::Key) (AInput::LButton + ev.xbutton.button - 1));
+                                break;
+                            case 4: // wheel down
+                                window->onMouseWheel({ev.xbutton.x, ev.xbutton.y}, -20_dp);
+                                break;
+                            case 5: // wheel up
+                                window->onMouseWheel({ev.xbutton.x, ev.xbutton.y}, 20_dp);
+                                break;
+                        }
                         break;
                     }
                     case ButtonRelease: {
-                        window = locateWindow(ev.xbutton.window);
-                        window->onMouseReleased({ev.xbutton.x, ev.xbutton.y},
-                                                (AInput::Key) (AInput::LButton + ev.xbutton.button - 1));
+                        if (ev.xbutton.button < 4) {
+                            window = locateWindow(ev.xbutton.window);
+                            window->onMouseReleased({ev.xbutton.x, ev.xbutton.y},
+                                                    (AInput::Key) (AInput::LButton + ev.xbutton.button - 1));
+                        }
                         break;
                     }
 
@@ -1508,14 +1522,11 @@ void AWindowManager::loop() {
                         break;
                     }
                 }
-                AThread::current()->processMessages();
-                if (window && window->mRedrawFlag) {
-                    window->mRedrawFlag = false;
-                    window->redraw();
-                }
             }
+
+
             std::unique_lock lock(mXNotifyLock);
-            mXNotifyCV.wait_for(lock, std::chrono::microseconds(1000));
+            mXNotifyCV.wait_for(lock, std::chrono::microseconds(500));
             AThread::current()->processMessages();
             for (auto& window : mWindows) {
                 if (window->mRedrawFlag) {

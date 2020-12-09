@@ -126,17 +126,22 @@ void AScrollbar::updateScrollHandleSize() {
     }
 }
 
-void AScrollbar::setScroll(size_t scroll) {
-    auto newScroll = glm::min(scroll, mFullSize - mViewportSize);
+void AScrollbar::setScroll(int scroll) {
+    auto newScroll = glm::clamp(scroll, 0, int(mFullSize - mViewportSize));
     if (mCurrentScroll != newScroll) {
+        mCurrentScroll = newScroll;
+
+        int handlePos = float(mCurrentScroll) * float(mViewportSize) / mFullSize;
+
         switch (mDirection) {
             case LayoutDirection::HORIZONTAL:
-                mOffsetSpacer->setFixedSize({scroll, 0});
+                mOffsetSpacer->setFixedSize(glm::ivec2{handlePos, 0});
                 break;
             case LayoutDirection::VERTICAL:
-                mOffsetSpacer->setFixedSize({0, scroll});
+                mOffsetSpacer->setFixedSize(glm::ivec2{0, handlePos});
                 break;
         }
+        updateLayout();
         redraw();
         emit scrolled(mCurrentScroll);
     }

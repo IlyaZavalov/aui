@@ -19,7 +19,8 @@ private:
     _<AScrollbarButton> mForwardButton;
     _<AScrollbarButton> mBackwardButton;
 
-    size_t mViewportSize = 0, mFullSize = 0, mCurrentScroll = 0;
+    size_t mViewportSize = 0, mFullSize = 0;
+    int mCurrentScroll = 0;
 
     void setOffset(size_t o);
 
@@ -30,11 +31,11 @@ public:
     void setScrollDimensions(size_t viewportSize, size_t fullSize);
 
     void updateScrollHandleSize();
-    void setScroll(size_t scroll);
+    void setScroll(int scroll);
     void onMouseWheel(glm::ivec2 pos, int delta) override;
 
 signals:
-    emits<size_t> scrolled;
+    emits<int> scrolled;
 };
 
 

@@ -9,7 +9,7 @@
 
 class AScrollAreaContainer: public AViewContainer {
 private:
-    size_t mScroll = 0;
+    int mScroll = 0;
 
 public:
 
@@ -28,7 +28,7 @@ public:
         return 30_dp;
     }
 
-    void setScrollY(size_t scroll) {
+    void setScrollY(int scroll) {
         mScroll = scroll;
         updateLayout();
     }
@@ -57,7 +57,7 @@ AScrollArea::~AScrollArea() = default;
 
 void AScrollArea::setSize(int width, int height) {
     AViewContainer::setSize(width, height);
-    mVerticalScrollbar->setScrollDimensions(mContentContainer->getContentHeight(), mContentContainer->AViewContainer::getContentMinimumHeight());
+    mVerticalScrollbar->setScrollDimensions(mContentContainer->getContentHeight() + mContentContainer->getTotalFieldVertical(), mContentContainer->AViewContainer::getContentMinimumHeight());
 }
 
 void AScrollArea::onMouseWheel(glm::ivec2 pos, int delta) {
