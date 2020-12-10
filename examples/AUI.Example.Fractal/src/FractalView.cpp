@@ -85,22 +85,54 @@ void FractalView::onMouseWheel(glm::ivec2 pos, int delta) {
     mTransform = glm::translate(mTransform, glm::dvec3{projectedPos, 0.0});
     mTransform = glm::scale(mTransform, glm::dvec3(1.0 - delta / 1000.0));
     mTransform = glm::translate(mTransform, -glm::dvec3{projectedPos, 0.0});
-    mShader.use();
-    mShader.set("tr", mTransform);
 
-    updateEmits();
+    handleMatrixUpdated();
 
     redraw();
 }
 
 void FractalView::reset() {
     mTransform = glm::dmat4(1.0);
-    mShader.use();
-    mShader.set("tr", mTransform);
-    updateEmits();
+    handleMatrixUpdated();
     redraw();
 }
 
-void FractalView::updateEmits() {
-    emit centerPosChanged(glm::vec2(mTransform * glm::vec4(0, 0, 0, 1)));
+void FractalView::handleMatrixUpdated() {
+    mShader.use();
+    mShader.set("tr", mTransform);
+    emit centerPosChanged(glm::vec2(mTransform * glm::vec4(0, 0, 0, 1)), mTransform[0][0]);
+}
+
+void FractalView::onKeyDown(AInput::Key key) {
+    AView::onKeyDown(key);
+    onKeyRepeat(key);
+}
+
+void FractalView::onKeyRepeat(AInput::Key key) {
+    AView::onKeyRepeat(key);
+    constexpr float SPEED = 0.2f;
+    switch (key) {
+        case AInput::Up:
+            mTransform = glm::translate(mTransform, {0, -SPEED, 0});
+            break;
+        case AInput::Down:
+            mTransform = glm::translate(mTransform, {0, SPEED, 0});
+            break;
+        case AInput::Left:
+            mTransform = glm::translate(mTransform, {-SPEED, 0, 0});
+            break;
+        case AInput::Right:
+            mTransform = glm::translate(mTransform, {SPEED, 0, 0});
+            break;
+        case AInput::PageDown:
+            mTransform = glm::scale(mTransform, glm::dvec3{0.99});
+            break;
+        case AInput::PageUp:
+            mTransform = glm::scale(mTransform, glm::dvec3{1.01});
+            break;
+
+        default:
+            return;
+    }
+    handleMatrixUpdated();
 }

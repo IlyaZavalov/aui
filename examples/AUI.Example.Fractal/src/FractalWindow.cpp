@@ -20,8 +20,10 @@ FractalWindow::FractalWindow():
     centerPosDisplay->setCss("background: #0008; padding: 4em; color: #fff; font-size: 11pt");
 
     auto fractal = _new<FractalView>();
-    connect(fractal->centerPosChanged, this, [centerPosDisplay](const glm::vec2& newPos) {
-        centerPosDisplay->setText("Center position: {} {}"_as.format(newPos.x, newPos.y));
+    connect(fractal->centerPosChanged, this, [centerPosDisplay](const glm::vec2& newPos, float scale) {
+        char buf[1024];
+        sprintf(buf, "Center position: %.20lf %.20lf, scale: %.4e", newPos.x, -newPos.y, scale);
+        centerPosDisplay->setText(buf);
     });
 
     addView(_container<AStackedLayout>({

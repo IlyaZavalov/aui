@@ -13,7 +13,7 @@ private:
 
     float mAspectRatio;
 
-    void updateEmits();
+    void handleMatrixUpdated();
 
 public:
     FractalView();
@@ -22,6 +22,10 @@ public:
     void reset();
 
     void setIterations(unsigned it);
+
+    void onKeyDown(AInput::Key key) override;
+
+    void onKeyRepeat(AInput::Key key) override;
 
     void onMouseWheel(glm::ivec2 pos, int delta) override;
 
@@ -36,6 +40,6 @@ public:
     }
 signals:
 
-    emits<glm::vec2> centerPosChanged;
+    emits<glm::vec2, float> centerPosChanged;
 };
 
