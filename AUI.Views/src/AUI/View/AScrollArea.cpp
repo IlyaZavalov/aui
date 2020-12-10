@@ -3,6 +3,7 @@
 //
 
 #include "AScrollArea.h"
+#include "AButton.h"
 #include <AUI/Layout/AAdvancedGridLayout.h>
 #include <AUI/Util/AMetric.h>
 #include <AUI/Util/kAUI.h>
@@ -42,7 +43,8 @@ AScrollArea::AScrollArea() {
     mContentContainer = contentContainer;
     addView(contentContainer);
     addView(mVerticalScrollbar = _new<AScrollbar>(LayoutDirection::VERTICAL));
-    addView(mHorizontalScrollbar = _new<AScrollbar>(LayoutDirection::HORIZONTAL));
+    //addView(mHorizontalScrollbar = _new<AScrollbar>(LayoutDirection::HORIZONTAL));
+    addView(_new<AButton>("ты лох"));
 
     mContentContainer->setCss("overflow: hidden");
     mContentContainer->setExpanding({2, 2});
@@ -57,7 +59,7 @@ AScrollArea::~AScrollArea() = default;
 
 void AScrollArea::setSize(int width, int height) {
     AViewContainer::setSize(width, height);
-    mVerticalScrollbar->setScrollDimensions(mContentContainer->getContentHeight() + mContentContainer->getTotalFieldVertical(), mContentContainer->AViewContainer::getContentMinimumHeight());
+    mVerticalScrollbar->setScrollDimensions(mContentContainer->getContentHeight(), mContentContainer->AViewContainer::getContentMinimumHeight() + mContentContainer->getTotalFieldVertical());
 }
 
 void AScrollArea::onMouseWheel(glm::ivec2 pos, int delta) {

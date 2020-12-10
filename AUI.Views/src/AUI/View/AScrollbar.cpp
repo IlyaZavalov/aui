@@ -127,7 +127,7 @@ void AScrollbar::updateScrollHandleSize() {
 }
 
 void AScrollbar::setScroll(int scroll) {
-    auto newScroll = glm::clamp(scroll, 0, int(mFullSize - mViewportSize));
+    auto newScroll = glm::clamp(scroll, 0, int(mFullSize));
     if (mCurrentScroll != newScroll) {
         mCurrentScroll = newScroll;
 
