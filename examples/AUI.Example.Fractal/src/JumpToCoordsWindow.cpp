@@ -36,7 +36,7 @@ JumpToCoordsWindow::JumpToCoordsWindow(_<FractalView> fractalView, AWindow* pare
         _new<AButton>("Jump").connect(&AButton::clicked, this, [&, fractalView, re, im, scale]() {
             try {
                 auto dRe = std::stod(re->getText().toStdString());
-                auto dIm = std::stod(im->getText().toStdString());
+                auto dIm = -std::stod(im->getText().toStdString());
                 auto dScale = std::stod(scale->getText().toStdString());
                 fractalView->setPlotPositionAndScale(glm::dvec2{dRe, dIm}, dScale);
                 close();
