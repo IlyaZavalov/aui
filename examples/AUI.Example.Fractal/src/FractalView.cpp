@@ -100,7 +100,7 @@ void FractalView::reset() {
 void FractalView::handleMatrixUpdated() {
     mShader.use();
     mShader.set("tr", mTransform);
-    emit centerPosChanged(glm::vec2(mTransform * glm::vec4(0, 0, 0, 1)), mTransform[0][0]);
+    emit centerPosChanged(getPlotPosition(), getPlotScale());
 }
 
 void FractalView::onKeyDown(AInput::Key key) {
@@ -134,5 +134,19 @@ void FractalView::onKeyRepeat(AInput::Key key) {
         default:
             return;
     }
+    handleMatrixUpdated();
+}
+
+glm::dvec2 FractalView::getPlotPosition() const {
+    return glm::dvec2(mTransform[3]);
+}
+
+double FractalView::getPlotScale() const {
+    return mTransform[0][0];
+}
+
+void FractalView::setPlotPositionAndScale(glm::dvec2 position, double scale) {
+    mTransform = glm::dmat4(scale);
+    mTransform[3] = glm::dvec4{position, 0, 1};
     handleMatrixUpdated();
 }

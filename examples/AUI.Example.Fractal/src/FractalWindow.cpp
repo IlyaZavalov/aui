@@ -7,6 +7,7 @@
 #include <AUI/Traits/strings.h>
 #include "FractalWindow.h"
 #include "FractalView.h"
+#include "JumpToCoordsWindow.h"
 #include <AUI/Util/UIBuildingHelpers.h>
 #include <AUI/View/AImageView.h>
 
@@ -20,7 +21,7 @@ FractalWindow::FractalWindow():
     centerPosDisplay->setCss("background: #0008; padding: 4em; color: #fff; font-size: 11pt");
 
     auto fractal = _new<FractalView>();
-    connect(fractal->centerPosChanged, this, [centerPosDisplay](const glm::vec2& newPos, float scale) {
+    connect(fractal->centerPosChanged, this, [centerPosDisplay](const glm::dvec2& newPos, double scale) {
         char buf[1024];
         sprintf(buf, "Center position: %.20lf %.20lf, scale: %.4e", newPos.x, -newPos.y, scale);
         centerPosDisplay->setText(buf);
@@ -45,6 +46,9 @@ FractalWindow::FractalWindow():
     addView(
         _container<AVerticalLayout>({
             _new<AButton>("Identity").connect(&AButton::clicked, slot(fractal)::reset),
+            _new<AButton>("Jump to coords...").connect(&AButton::clicked, this, [&, fractal]() {
+                _new<JumpToCoordsWindow>(fractal, this)->show();
+            }),
             _new<ALabel>("Iterations:"),
             _new<ANumberPicker>().connect(&ANumberPicker::valueChanged, this, [fractal](int v) {
                 fractal->setIterations(v);
@@ -57,8 +61,5 @@ FractalWindow::FractalWindow():
                 setCss("height: 10em; margin: 4em;");
             }),
     }));
-
-    connect(fractal->centerPosChanged, this, [](const glm::vec2& p) {
-
-    });
+    fractal->focus();
 }

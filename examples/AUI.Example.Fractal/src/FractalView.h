@@ -38,8 +38,14 @@ public:
     const _<GL::Texture2D>& getTexture() const {
         return mTexture;
     }
+
+    glm::dvec2 getPlotPosition() const;
+    double getPlotScale() const;
+
+    void setPlotPositionAndScale(glm::dvec2 position, double scale);
+
 signals:
 
-    emits<glm::vec2, float> centerPosChanged;
+    emits<glm::dvec2, double> centerPosChanged;
 };
 
