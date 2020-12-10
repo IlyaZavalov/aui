@@ -5,8 +5,6 @@
 extern unsigned char stencilDepth;
 
 void RenderHints::PushMask::pushMask(const std::function<void()>& maskRenderer) {
-
-    glStencilFunc(GL_ALWAYS, 0, 0xff);
     glStencilOp(GL_KEEP, GL_INCR, GL_INCR);
     glStencilMask(0xff);
     glColorMask(false, false, false, false);
@@ -21,7 +19,6 @@ void RenderHints::PushMask::pushMask(const std::function<void()>& maskRenderer) 
 
 void RenderHints::PushMask::popMask(const std::function<void()>& maskRenderer) {
 
-    glStencilFunc(GL_ALWAYS, 0, 0xff);
     glStencilOp(GL_KEEP, GL_DECR, GL_DECR);
     glStencilMask(0xff);
     glColorMask(false, false, false, false);
