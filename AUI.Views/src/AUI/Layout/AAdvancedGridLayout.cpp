@@ -75,7 +75,7 @@ void AAdvancedGridLayout::onResize(int x, int y, int width, int height)
     {
         unsigned expandingSum = 0;
         int minSize = 0;
-        unsigned available;
+        int available;
 
         int finalPos = 0;
         int finalSize = 0;
@@ -88,10 +88,10 @@ void AAdvancedGridLayout::onResize(int x, int y, int width, int height)
     rows.resize(cellsY);
 
     for (auto& r : rows) {
-        r.available = height - y;
+        r.available = width - x;
     }
     for (auto& c : columns) {
-        c.available = width - x;
+        c.available = height - y;
     }
 
     // подготовка
@@ -112,13 +112,16 @@ void AAdvancedGridLayout::onResize(int x, int y, int width, int height)
         rows[v.y].minSize    = glm::max(rows[v.y].minSize,    minSpace.y);
     }
 
-    // подсчёт суммы расширения
+    // подсчёт суммы расширения и ддоступного места
     glm::ivec2 sums(0);
+    glm::ivec2 available(std::numeric_limits<int>::max());
     for (auto& c : columns) {
         sums.x += c.expandingSum;
+        available.y = glm::min(available.y, c.available);
     }
     for (auto& r : rows) {
         sums.y += r.expandingSum;
+        available.x = glm::min(available.x, r.available);
     }
     sums = glm::max(sums, glm::ivec2(1));
     float pos = x;
@@ -194,12 +197,8 @@ int AAdvancedGridLayout::getMinimumWidth()
     int min = -mSpacing;
     for (int x = 0; x < cellsX; ++x)
     {
-        int minForColumn = 0;
-        for (auto& view : getRow(x))
-        {
-            minForColumn = glm::max(int(view->getMinimumWidth() + view->getMargin().horizontal()), minForColumn);
-        }
-        min += minForColumn + mSpacing;
+
+        min += getColumnMinimumWidth(x) + mSpacing;
     }
     return min;
 }
@@ -209,12 +208,24 @@ int AAdvancedGridLayout::getMinimumHeight()
     int min = -mSpacing;
     for (int y = 0; y < cellsY; ++y)
     {
-        int minForRow = 0;
-        for (auto& view : getRow(y))
-        {
-            minForRow = glm::max(int(view->getMinimumHeight() + view->getMargin().vertical()), minForRow);
-        }
-        min += minForRow + mSpacing;
+        min += getRowMinimumHeight(y) + mSpacing;
     }
     return min;
+}
+
+int AAdvancedGridLayout::getColumnMinimumWidth(int column) {
+    int minForColumn = 0;
+    for (auto& view : getRow(column))
+    {
+        minForColumn = glm::max(int(view->getMinimumWidth() + view->getMargin().horizontal()), minForColumn);
+    }
+    return minForColumn;
+}
+int AAdvancedGridLayout::getRowMinimumHeight(int row) {
+    int minForRow = 0;
+    for (auto& view : getRow(row))
+    {
+        minForRow = glm::max(int(view->getMinimumHeight() + view->getMargin().vertical()), minForRow);
+    }
+    return minForRow;
 }

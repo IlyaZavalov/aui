@@ -21,6 +21,9 @@ private:
     AVector<_<AView>> getRow(int row);
     AVector<_<AView>> getColumn(int column);
 
+    int getColumnMinimumWidth(int column);
+    int getRowMinimumHeight(int column);
+
 public:
 
     AAdvancedGridLayout(int cellsX, int cellsY);
