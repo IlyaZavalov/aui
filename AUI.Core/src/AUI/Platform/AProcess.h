@@ -24,8 +24,12 @@ private:
     APath mWorkingDirectory;
 
 #if defined(_WIN32)
-    PROCESS_INFORMATION mProcessInformation;
+    HANDLE mHandle;
+
+
+    explicit AProcess(HANDLE handle): mHandle(handle) {}
 #endif
+
 
 public:
     AProcess(const AString& applicationFile) : mApplicationFile(applicationFile) {}
@@ -80,6 +84,16 @@ public:
                        bool waitForExit = true);
 
 
+    struct CpuTime {
+        time_t kernel;
+        time_t user;
+    };
+
+    /**
+     * \return Время текущего процесса в микросекундах
+     */
+    CpuTime getCpuTime() const;
+
     /**
      * \brief Запустить указанный исполяемый файл от имени адмнистратор с указанными аргументами.
      * \param applicationFile исполняемый файл
@@ -90,6 +104,8 @@ public:
     static void executeAsAdministrator(const AString& applicationFile,
                                       const AString& args = {},
                                       const APath& workingDirectory = {});
+
+    static AProcess& current();
 };
 
 

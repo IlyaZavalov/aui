@@ -81,7 +81,7 @@ public:
 	}
 	AString toString() override
 	{
-		return AString::number(static_cast<T>(mStored));
+		return std::to_wstring(static_cast<T>(mStored));
 	}
 
 	size_t hash() override
@@ -103,6 +103,34 @@ template<> struct AVariantHelper<int>: AVariantHelperNumeric<int>
 {
 	AVariantHelper(int stored)
 		: AVariantHelperNumeric<int>(stored)
+	{
+	}
+};
+template<> struct AVariantHelper<long>: AVariantHelperNumeric<long>
+{
+	AVariantHelper(long stored)
+		: AVariantHelperNumeric<long>(stored)
+	{
+	}
+};
+template<> struct AVariantHelper<long long>: AVariantHelperNumeric<long long>
+{
+	AVariantHelper(long long stored)
+		: AVariantHelperNumeric<long long>(stored)
+	{
+	}
+};
+template<> struct AVariantHelper<unsigned long>: AVariantHelperNumeric<unsigned long>
+{
+	AVariantHelper(unsigned long stored)
+		: AVariantHelperNumeric<unsigned long>(stored)
+	{
+	}
+};
+template<> struct AVariantHelper<unsigned long long>: AVariantHelperNumeric<unsigned long long>
+{
+	AVariantHelper(unsigned long long stored)
+		: AVariantHelperNumeric<unsigned long long>(stored)
 	{
 	}
 };

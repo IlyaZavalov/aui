@@ -2,9 +2,8 @@
 // Created by alex2 on 31.10.2020.
 //
 
-#include "AProcess.h"
-
 #ifdef _WIN32
+#include "AProcess.h"
 #include <windows.h>
 #include <AUI/Traits/memory.h>
 #include <AUI/Logging/ALogger.h>
@@ -49,6 +48,7 @@ void AProcess::run() {
     aui::zero(startupInfo);
     startupInfo.cb = sizeof(startupInfo);
 
+    PROCESS_INFORMATION processInformation;
 
     if (!CreateProcess(mApplicationFile.c_str(),
                        const_cast<wchar_t*>(mArgs.empty() ? nullptr : mArgs.c_str()),
@@ -59,7 +59,7 @@ void AProcess::run() {
                        nullptr,
                        mWorkingDirectory.empty() ? nullptr : mWorkingDirectory.c_str(),
                        &startupInfo,
-                       &mProcessInformation)) {
+                       &processInformation)) {
         AString message = "Could not create process " + mApplicationFile;
         if (!mArgs.empty())
             message += " with args " + mArgs;
@@ -67,30 +67,42 @@ void AProcess::run() {
             message += " in " + mWorkingDirectory;
         throw AProcessException(message);
     }
-
+    mHandle = processInformation.hProcess;
 }
 
 void AProcess::wait() {
-    WaitForSingleObject(mProcessInformation.hProcess, INFINITE);
+    WaitForSingleObject(mHandle, INFINITE);
 }
 
 int AProcess::getExitCode() {
     DWORD exitCode;
     wait();
-    int r = GetExitCodeProcess(mProcessInformation.hProcess, &exitCode);
+    int r = GetExitCodeProcess(mHandle, &exitCode);
     assert(r && r != STILL_ACTIVE);
     return exitCode;
 }
 
-#else
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <cassert>
-
-void AProcess::execute(const AString& command, const AString& args, const APath& workingDirectory) {
-    assert(0);
+AProcess& AProcess::current() {
+    static AProcess p(GetCurrentProcess());
+    return p;
 }
+
+AProcess::CpuTime AProcess::getCpuTime() const {
+    auto convert = [](FILETIME f) {
+        time_t time = f.dwHighDateTime;
+        time <<= 32u;
+        time |= (f.dwLowDateTime);
+        return time / 100;
+    };
+
+    FILETIME ignored;
+    FILETIME kernel;
+    FILETIME user;
+    auto r = GetProcessTimes(mHandle, &ignored, &ignored, &kernel, &user);
+    assert(r);
+    return {convert(kernel), convert(user)};
+}
+
 
 #endif
 
