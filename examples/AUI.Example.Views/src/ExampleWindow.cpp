@@ -17,7 +17,36 @@
 #include <AUI/View/AComboBox.h>
 #include <AUI/i18n/AI18n.h>
 #include <AUI/View/ASelectableLabel.h>
+template<typename Layout>
+struct container
+{
+    template<typename... Args>
+    inline container(Args&&... args) {
+        mContainer = _new<AViewContainer>();
+        mContainer->setLayout(_new<Layout>());
 
+        processArgs(std::forward<Args>(args)...);
+    }
+
+    operator _<AView>() {
+
+        return mContainer;
+    }
+
+private:
+    _<AViewContainer> mContainer;
+
+    template<typename Arg, typename... Args>
+    inline void processArgs(Arg&& arg, Args&&... args) {
+        processArg(std::forward<Arg>(arg));
+        processArgs(std::forward<Args>(args)...);
+    }
+    inline void processArgs() {}
+
+    inline void processArg(_<AView>&& args) {
+
+    }
+};
 void fillWindow(_<AViewContainer> t)
 {
 	t->setLayout(_new<AStackedLayout>());
@@ -34,6 +63,10 @@ ExampleWindow::ExampleWindow(): AWindow(u8"Примеры")
 	horizontal->addCssName(".contents");
 	horizontal->setLayout(_new<AHorizontalLayout>());
 	addView(horizontal);
+
+	addView(container<AHorizontalLayout> {
+	    AButton("Тириририи"),
+	});
 
 	horizontal->setExpanding({ 1, 1 });
 	
