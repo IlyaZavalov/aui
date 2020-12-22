@@ -18,10 +18,10 @@
 #include <AUI/i18n/AI18n.h>
 #include <AUI/View/ASelectableLabel.h>
 template<typename Layout>
-struct container
+struct Container
 {
     template<typename... Args>
-    inline container(Args&&... args) {
+    inline Container(Args&&... args) {
         mContainer = _new<AViewContainer>();
         mContainer->setLayout(_new<Layout>());
 
@@ -38,15 +38,23 @@ private:
 
     template<typename Arg, typename... Args>
     inline void processArgs(Arg&& arg, Args&&... args) {
-        processArg(std::forward<Arg>(arg));
+        processArg(arg);
         processArgs(std::forward<Args>(args)...);
     }
     inline void processArgs() {}
 
-    inline void processArg(_<AView>&& args) {
-
+    template<typename T>
+    inline void processArg(T&& arg) {
+        mContainer->addView(_new<typename std::remove_reference_t<T>::View>(arg));
     }
+
+    template<typename T>
+    inline void processArg(_<T>&& arg) {
+        mContainer->addView(arg);
+    }
+
 };
+
 void fillWindow(_<AViewContainer> t)
 {
 	t->setLayout(_new<AStackedLayout>());
@@ -64,8 +72,10 @@ ExampleWindow::ExampleWindow(): AWindow(u8"Примеры")
 	horizontal->setLayout(_new<AHorizontalLayout>());
 	addView(horizontal);
 
-	addView(container<AHorizontalLayout> {
-	    AButton("Тириририи"),
+	addView(Container<AHorizontalLayout> {
+	    Button {
+	        .text = "Тиририирири",
+	    },
 	});
 
 	horizontal->setExpanding({ 1, 1 });

@@ -30,3 +30,7 @@ void AButton::getCustomCssAttributes(AMap<AString, AVariant>& map)
 	if (mDefault)
 		map["default"] = true;
 }
+
+AButton::AButton(const Button& init) {
+    setText(init.text);
+}
