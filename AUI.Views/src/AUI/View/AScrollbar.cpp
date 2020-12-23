@@ -96,16 +96,7 @@ void AScrollbar::setScrollDimensions(size_t viewportSize, size_t fullSize) {
 }
 
 void AScrollbar::updateScrollHandleSize() {
-    float scrollbarSpace = 0;
-
-    switch (mDirection) {
-        case LayoutDirection::HORIZONTAL:
-            scrollbarSpace = getWidth() + mBackwardButton->getTotalOccupiedWidth() + mForwardButton->getTotalOccupiedWidth() + mHandle->getMargin().horizontal();
-            break;
-        case LayoutDirection::VERTICAL:
-            scrollbarSpace = getHeight() + mBackwardButton->getTotalOccupiedHeight() + mForwardButton->getTotalOccupiedHeight() + mHandle->getMargin().vertical();
-            break;
-    }
+    float scrollbarSpace = getScrollHandleSpace();
 
     size_t o = glm::max(10_dp, scrollbarSpace * mViewportSize / mFullSize);
 
@@ -127,11 +118,11 @@ void AScrollbar::updateScrollHandleSize() {
 }
 
 void AScrollbar::setScroll(int scroll) {
-    auto newScroll = glm::clamp(scroll, 0, int(mFullSize));
+    auto newScroll = glm::clamp(scroll, 0, int(mFullSize - mViewportSize));
     if (mCurrentScroll != newScroll) {
         mCurrentScroll = newScroll;
 
-        int handlePos = float(mCurrentScroll) * float(mViewportSize) / mFullSize;
+        int handlePos = float(mCurrentScroll) * getScrollHandleSpace() / mFullSize;
 
         switch (mDirection) {
             case LayoutDirection::HORIZONTAL:
@@ -150,4 +141,16 @@ void AScrollbar::setScroll(int scroll) {
 void AScrollbar::onMouseWheel(glm::ivec2 pos, int delta) {
     AViewContainer::onMouseWheel(pos, delta);
     setScroll(mCurrentScroll - delta / 2);
+}
+
+float AScrollbar::getScrollHandleSpace() {
+    switch (mDirection) {
+        case LayoutDirection::HORIZONTAL:
+            return getContentWidth() - (mBackwardButton->getTotalOccupiedWidth() + mForwardButton->getTotalOccupiedWidth() + mHandle->getMargin().horizontal());
+
+        case LayoutDirection::VERTICAL:
+            return getContentHeight() - (mBackwardButton->getTotalOccupiedHeight() + mForwardButton->getTotalOccupiedHeight() + mHandle->getMargin().vertical());
+    }
+    assert(0);
+    return 0.f;
 }

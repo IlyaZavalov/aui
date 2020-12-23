@@ -23,7 +23,7 @@ private:
     int mCurrentScroll = 0;
 
     void setOffset(size_t o);
-
+    float getScrollHandleSpace();
 public:
 
     explicit AScrollbar(LayoutDirection direction);

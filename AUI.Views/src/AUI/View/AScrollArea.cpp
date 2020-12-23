@@ -43,8 +43,9 @@ AScrollArea::AScrollArea() {
     mContentContainer = contentContainer;
     addView(contentContainer);
     addView(mVerticalScrollbar = _new<AScrollbar>(LayoutDirection::VERTICAL));
-    //addView(mHorizontalScrollbar = _new<AScrollbar>(LayoutDirection::HORIZONTAL));
-    addView(_new<AButton>("ты лох"));
+    addView(mHorizontalScrollbar = _new<AScrollbar>(LayoutDirection::HORIZONTAL));
+
+    mHorizontalScrollbar->setVisibility(V_GONE);
 
     mContentContainer->setCss("overflow: hidden");
     mContentContainer->setExpanding({2, 2});

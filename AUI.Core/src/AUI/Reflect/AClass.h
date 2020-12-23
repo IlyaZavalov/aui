@@ -29,6 +29,8 @@ public:
 		auto b = s.find("with T = ") + 9;
 		auto e = s.find("&", b);
         auto result = s.mid(b, e - b);
+        if (result.endsWith("]"))
+        	result.resize(result.length() - 1);
         return result;
 #endif
 	}

@@ -96,6 +96,9 @@ void AAdvancedGridLayout::onResize(int x, int y, int width, int height)
 
     // подготовка
     for (auto& v : mCells) {
+        if (v.view->getVisibility() == AView::V_GONE)
+            continue;
+
         v.view->ensureCSSUpdated();
         glm::ivec2 e = {v.view->getExpandingHorizontal(), v.view->getExpandingVertical()};
         glm::ivec2 m = {v.view->getMinimumWidth(), v.view->getMinimumHeight()};
@@ -114,14 +117,18 @@ void AAdvancedGridLayout::onResize(int x, int y, int width, int height)
 
     // подсчёт суммы расширения и ддоступного места
     glm::ivec2 sums(0);
-    glm::ivec2 available(std::numeric_limits<int>::max());
+    glm::ivec2 available{width - x, height - y};
     for (auto& c : columns) {
         sums.x += c.expandingSum;
-        available.y = glm::min(available.y, c.available);
+        if (c.expandingSum != 0) {
+            available.y = glm::min(available.y, c.available);
+        }
     }
     for (auto& r : rows) {
         sums.y += r.expandingSum;
-        available.x = glm::min(available.x, r.available);
+        if (r.expandingSum != 0) {
+            available.x = glm::min(available.x, r.available);
+        }
     }
     sums = glm::max(sums, glm::ivec2(1));
     float pos = x;
@@ -129,14 +136,14 @@ void AAdvancedGridLayout::onResize(int x, int y, int width, int height)
     // подсчёт финального размера
     for (auto& c : columns) {
         c.finalPos = glm::round(pos);
-        c.finalSize = glm::round(glm::max(float(c.available * c.expandingSum) / sums.x, float(c.minSize)));
+        c.finalSize = glm::round(glm::max(float(available.x * c.expandingSum) / sums.x, float(c.minSize)));
 
         pos += c.finalSize + mSpacing;
     }
     pos = y;
     for (auto& r : rows) {
         r.finalPos = glm::round(pos);
-        r.finalSize = glm::round(glm::max(float(r.available * r.expandingSum) / sums.y, float(r.minSize)));
+        r.finalSize = glm::round(glm::max(float(available.y * r.expandingSum) / sums.y, float(r.minSize)));
 
         pos += r.finalSize + mSpacing;
     }

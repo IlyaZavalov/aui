@@ -11,17 +11,20 @@
 #include <AUI/View/AScrollbar.h>
 
 
+
 DESIGNER_REGISTRATION(ALabel, {
     virtual _<AView> instanciate() {
         return _new<ALabel>("Метка");
     }
 })
 
+
 DESIGNER_REGISTRATION(AButton, {
     virtual _<AView> instanciate() {
         return _new<AButton>("Кноп Очка");
     }
 })
+
 DESIGNER_REGISTRATION(ATextField, {
     virtual _<AView> instanciate() {
         auto t = _new<ATextField>();
@@ -34,19 +37,17 @@ DESIGNER_REGISTRATION(AComboBox, {
         return _new<AComboBox>(_new<AListModel<AString>>(AVector<AString>{"Кккккккомбобокс", "Ты чё сюда смотришь?"}));
     }
 })
+
 DESIGNER_REGISTRATION(ACheckBox, {
     virtual _<AView> instanciate() {
         return _new<ACheckBox>("Гал Очка");
     }
 })
+
+
 DESIGNER_REGISTRATION(ARadioButton, {
     virtual _<AView> instanciate() {
         return _new<ARadioButton>("Флаж Очек");
-    }
-})
-DESIGNER_REGISTRATION(AScrollbar, {
-    virtual _<AView> instanciate() {
-        return _new<AScrollbar>(LayoutDirection::HORIZONTAL);
     }
 })
 

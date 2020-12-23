@@ -20,7 +20,7 @@ DesignerWindow::DesignerWindow():
 
     repeat(10) {
         for (auto& c : aui::detail::DesignerRegistrationBase::getRegistrations()) {
-            componentsList->getContentContainer()->addView(c->instanciate());
+            componentsList->getContentContainer()->addView(_new<ALabel>(c->name()));
         }
     }
 
