@@ -168,9 +168,9 @@ void ALabel::doRenderText() {
                     auto requiredSpace = mIcon->getSizeHint();
                     RenderHints::PushState s;
                     Render::inst().setTransform(glm::translate(glm::mat4(1.f),
-                                                               glm::vec3(leftPadding, (getContentHeight() - requiredSpace.y) / 2, 0)));
+                                                               glm::vec3(leftPadding, (getContentHeight() - requiredSpace.y) / 2 + 2_dp, 0)));
                     mIcon->draw(requiredSpace);
-                    leftPadding += requiredSpace.x + 1;
+                    leftPadding += requiredSpace.x + 2_dp;
                 }
                 break;
 
@@ -182,7 +182,7 @@ void ALabel::doRenderText() {
                     RenderHints::PushState s;
                     Render::inst().setTransform(glm::translate(glm::mat4(1.f),
                                                                glm::vec3(leftPadding - (mPrerendered.mVao ? mPrerendered.fs.getWidth(mText) : 0) - requiredSpace.x / 2,
-                                                                             (getContentHeight() - requiredSpace.y) / 2, 0)));
+                                                                             (getContentHeight() - requiredSpace.y) / 2 + 2_dp, 0)));
                     mIcon->draw(requiredSpace);
                 }
 
@@ -196,7 +196,7 @@ void ALabel::doRenderText() {
                     RenderHints::PushState s;
                     Render::inst().setTransform(glm::translate(glm::mat4(1.f),
                                                                glm::vec3(leftPadding - (mPrerendered.mVao ? mPrerendered.fs.getWidth(mText) : 0) - requiredSpace.x / 2,
-                                                                             (getContentHeight() - requiredSpace.y) / 2, 0)));
+                                                                             (getContentHeight() - requiredSpace.y) / 2 + 2_dp, 0)));
                     mIcon->draw(requiredSpace);
                 }
 

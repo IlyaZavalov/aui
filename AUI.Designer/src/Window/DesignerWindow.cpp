@@ -8,6 +8,7 @@
 #include <AUI/Designer/DesignerRegistrator.h>
 #include <View/FakeWindow.h>
 #include <AUI/View/AScrollArea.h>
+#include <AUI/Image/Drawables.h>
 
 DesignerWindow::DesignerWindow():
     AWindow("AUI Designer")
@@ -20,7 +21,13 @@ DesignerWindow::DesignerWindow():
 
     repeat(10) {
         for (auto& c : aui::detail::DesignerRegistrationBase::getRegistrations()) {
-            componentsList->getContentContainer()->addView(_new<ALabel>(c->name()));
+            auto l = _new<ALabel>(c->name());
+            if (auto icon = Drawables::get(":designer/icons/" + c->name() + ".svg")) {
+                l->setIcon(icon);
+            } else {
+                l->setIcon(Drawables::get(":designer/icons/unknown.svg"));
+            }
+            componentsList->getContentContainer()->addView(l);
         }
     }
 
