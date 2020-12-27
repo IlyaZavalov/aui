@@ -49,7 +49,7 @@ void ADragArea::ADraggableHandle::onMouseMove(glm::ivec2 pos) {
 void ADragArea::startDragging(AViewContainer* container) {
     for (auto& v : getViews()) {
         if (v.get() == container) {
-            mDraggedContainer = _cast<AViewContainer>(v);
+            mDraggedView = v;
             mInitialMousePos = ADesktop::getMousePosition() - container->getPosition();
             break;
         }
@@ -57,7 +57,7 @@ void ADragArea::startDragging(AViewContainer* container) {
 }
 
 void ADragArea::handleMouseMove() {
-    if (auto s = mDraggedContainer.lock()) {
+    if (auto s = mDraggedView.lock()) {
         auto newPos = ADesktop::getMousePosition() - mInitialMousePos;
         s->setPosition(glm::clamp(newPos, glm::ivec2{0, 0}, getSize() - s->getSize()));
         redraw();
@@ -65,5 +65,5 @@ void ADragArea::handleMouseMove() {
 }
 
 void ADragArea::endDragging() {
-    mDraggedContainer.reset();
+    mDraggedView.reset();
 }

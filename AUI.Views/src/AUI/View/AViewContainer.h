@@ -11,15 +11,16 @@
 class API_AUI_VIEWS AViewContainer: public AView
 {
 private:
-	_<ALayout> mLayout;
+    _<ALayout> mLayout;
     bool mSizeSet = false;
     bool mHasBackground = false;
 	glm::ivec2 mPreviousSize = mSize;
 
 protected:
 	AVector<_<AView>> mViews;
-	
+
 	void drawView(const _<AView>& view);
+    void addViewNoLayout(const _<AView>& view);
 
 	template <typename Iterator>
 	void drawViews(Iterator begin, Iterator end)
@@ -39,28 +40,28 @@ protected:
      * \brief Обновляет макет родительского AView, если размер этого элемента был изменён.
      */
     void updateParentsLayoutIfNecessary();
-
 public:
-	AViewContainer();
-	virtual ~AViewContainer();
-	void addView(_<AView> view);
-	void removeView(_<AView> view);
+    AViewContainer();
+    virtual ~AViewContainer();
+    void addView(const _<AView>& view);
+    void removeView(const _<AView>& view);
+
 	void removeAllViews();
 
+
 	void render() override;
+    void onMouseEnter() override;
+    void onMouseMove(glm::ivec2 pos) override;
 
 
-	void onMouseEnter() override;
-	void onMouseMove(glm::ivec2 pos) override;
+
 	void onMouseLeave() override;
+    int getContentMinimumWidth() override;
 
-
-
-	int getContentMinimumWidth() override;
 	int getContentMinimumHeight() override;
-	
-	void onMousePressed(glm::ivec2 pos, AInput::Key button) override;
-	void onMouseDoubleClicked(glm::ivec2 pos, AInput::Key button) override;
+    void onMousePressed(glm::ivec2 pos, AInput::Key button) override;
+    void onMouseDoubleClicked(glm::ivec2 pos, AInput::Key button) override;
+
 	void onMouseReleased(glm::ivec2 pos, AInput::Key button) override;
 
     void onMouseWheel(glm::ivec2 pos, int delta) override;
@@ -68,15 +69,15 @@ public:
     bool consumesClick(const glm::ivec2& pos) override;
 
     void setSize(int width, int height) override;
-
-	/**
+    /**
 	 * \brief выставить компоновщик для этого контейнера. УНИЧТОЖАЕТ СТАРЫЙ
 	 *        КОМПОНОВЩИК ВМЕСТЕ СО ВСЕМИ ЕГО ЭЛЕМЕНТАМИ!!
 	 */
 	void setLayout(_<ALayout> layout);
-	_<ALayout> getLayout() const;
 
-	_<AView> getViewAt(glm::ivec2 pos, bool ignoreGone = true);
+	_<ALayout> getLayout() const;
+    _<AView> getViewAt(glm::ivec2 pos, bool ignoreGone = true);
+
 	_<AView> getViewAtRecursive(glm::ivec2 pos);
 
 	template<typename T>

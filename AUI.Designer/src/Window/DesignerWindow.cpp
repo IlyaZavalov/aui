@@ -11,6 +11,8 @@
 #include <AUI/Image/Drawables.h>
 #include <AUI/View/APageView.h>
 #include <AUI/View/APageSwitch.h>
+#include <View/ViewLabel.h>
+#include <View/DesignerArea.h>
 
 DesignerWindow::DesignerWindow():
     AWindow("AUI Designer")
@@ -22,7 +24,7 @@ DesignerWindow::DesignerWindow():
     componentsList->getContentContainer()->setLayout(_new<AVerticalLayout>());
 
     for (auto& c : aui::detail::DesignerRegistrationBase::getRegistrations()) {
-        auto l = _new<ALabel>(c->name());
+        auto l = _new<ViewLabel>(c);
         if (auto icon = Drawables::get(":designer/icons/" + c->name() + ".svg")) {
             l->setIcon(icon);
         } else {
@@ -38,6 +40,10 @@ DesignerWindow::DesignerWindow():
     viewsPageView->addPage(componentsList);
     viewsPageView->addPage(_new<ALabel>("ты лох"));
     viewsPageView->addPage(_new<ALabel>("ты лох"));
+
+    auto designerArea = _new<DesignerArea>();
+    Autumn::put(designerArea);
+    designerArea->setExpanding({2, 2});
 
     addView(_container<AVerticalLayout>({
         _container<AHorizontalLayout>({
@@ -55,11 +61,7 @@ DesignerWindow::DesignerWindow():
             viewsPageView,
 
             // центральная рабочая область
-            _container<AStackedLayout>({
-                _new<FakeWindow>()
-            }) let (AViewContainer, {
-                setExpanding({2, 2});
-            })
+            designerArea
         }) let (AViewContainer, {
             setExpanding({2, 2});
         })
@@ -68,3 +70,4 @@ DesignerWindow::DesignerWindow():
     }));
     setCss("padding: 0");
 }
+

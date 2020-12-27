@@ -9,7 +9,7 @@
 
 class API_AUI_VIEWS ADragArea: public AViewContainer {
 private:
-    _weak<AViewContainer> mDraggedContainer;
+    _weak<AView> mDraggedView;
     glm::ivec2 mInitialMousePos;
 
 public:

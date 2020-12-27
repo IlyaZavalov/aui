@@ -10,6 +10,7 @@
 class DesignerWindow: public AWindow {
 public:
     DesignerWindow();
+
 };
 
 

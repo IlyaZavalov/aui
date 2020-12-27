@@ -1117,7 +1117,7 @@ void AWindow::onMouseMove(glm::ivec2 pos) {
     if (v) {
         mCursor = v->getCursor();
     }
-    if (!AWindow::shouldDisplayHoverAnimations()) {
+    {
         if (auto focused = mFocusedView.lock()) {
             if (focused != v) {
                 focused->onMouseMove(pos - focused->getPositionInWindow());

@@ -61,15 +61,19 @@ AViewContainer::~AViewContainer()
 	//Stylesheet::inst().invalidateCache();
 }
 
-void AViewContainer::addView(_<AView> view)
+void AViewContainer::addViewNoLayout(const _<AView>& view) {
+    view->mParent = this;
+    mViews << view;
+}
+
+void AViewContainer::addView(const _<AView>& view)
 {
-	mViews << view;
-	view->mParent = this;
+    addViewNoLayout(view);
 	if (mLayout)
 		mLayout->addView(view);
 }
 
-void AViewContainer::removeView(_<AView> view)
+void AViewContainer::removeView(const _<AView>& view)
 {
 	mViews.remove(view);
 	if (mLayout)
@@ -95,7 +99,7 @@ void AViewContainer::onMouseMove(glm::ivec2 pos)
 	{
 		if (!view->isEnabled())
 			continue;
-		
+
 		auto mousePos = pos - view->getPosition();
 		bool hovered = mousePos.x >= 0 && mousePos.y >= 0 && mousePos.x < view->getSize().x && mousePos.y < view->getSize().y;
         if (view->isMouseHover() != hovered) {
@@ -132,6 +136,7 @@ int AViewContainer::getContentMinimumWidth()
 	return AView::getContentMinimumWidth();
 }
 
+
 int AViewContainer::getContentMinimumHeight()
 {
 	if (mLayout)
@@ -140,7 +145,6 @@ int AViewContainer::getContentMinimumHeight()
 	}
 	return AView::getContentMinimumHeight();
 }
-
 
 void AViewContainer::onMousePressed(glm::ivec2 pos, AInput::Key button)
 {
@@ -152,7 +156,6 @@ void AViewContainer::onMousePressed(glm::ivec2 pos, AInput::Key button)
 		p->onMousePressed(pos - p->getPosition(), button);
 	}
 }
-
 void AViewContainer::onMouseReleased(glm::ivec2 pos, AInput::Key button)
 {
 	AView::onMouseReleased(pos, button);
@@ -160,6 +163,7 @@ void AViewContainer::onMouseReleased(glm::ivec2 pos, AInput::Key button)
 	if (p && p->isEnabled() && p->isMousePressed())
 		p->onMouseReleased(pos - p->getPosition(), button);
 }
+
 void AViewContainer::onMouseDoubleClicked(glm::ivec2 pos, AInput::Key button)
 {
 	AView::onMouseDoubleClicked(pos, button);
@@ -196,6 +200,7 @@ _<ALayout> AViewContainer::getLayout() const
 	return mLayout;
 }
 
+
 _<AView> AViewContainer::getViewAt(glm::ivec2 pos, bool ignoreGone)
 {
     _<AView> possibleOutput = nullptr;
@@ -216,7 +221,6 @@ _<AView> AViewContainer::getViewAt(glm::ivec2 pos, bool ignoreGone)
 	}
 	return possibleOutput;
 }
-
 
 _<AView> AViewContainer::getViewAtRecursive(glm::ivec2 pos)
 {
