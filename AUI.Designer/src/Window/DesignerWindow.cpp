@@ -9,6 +9,8 @@
 #include <View/FakeWindow.h>
 #include <AUI/View/AScrollArea.h>
 #include <AUI/Image/Drawables.h>
+#include <AUI/View/APageView.h>
+#include <AUI/View/APageSwitch.h>
 
 DesignerWindow::DesignerWindow():
     AWindow("AUI Designer")
@@ -19,17 +21,23 @@ DesignerWindow::DesignerWindow():
 
     componentsList->getContentContainer()->setLayout(_new<AVerticalLayout>());
 
-    repeat(10) {
-        for (auto& c : aui::detail::DesignerRegistrationBase::getRegistrations()) {
-            auto l = _new<ALabel>(c->name());
-            if (auto icon = Drawables::get(":designer/icons/" + c->name() + ".svg")) {
-                l->setIcon(icon);
-            } else {
-                l->setIcon(Drawables::get(":designer/icons/unknown.svg"));
-            }
-            componentsList->getContentContainer()->addView(l);
+    for (auto& c : aui::detail::DesignerRegistrationBase::getRegistrations()) {
+        auto l = _new<ALabel>(c->name());
+        if (auto icon = Drawables::get(":designer/icons/" + c->name() + ".svg")) {
+            l->setIcon(icon);
+        } else {
+            l->setIcon(Drawables::get(":designer/icons/unknown.svg"));
         }
+        componentsList->getContentContainer()->addView(l);
     }
+
+
+    // вкладки представлений
+    auto viewsPageView = _new<APageView>() << ".components";
+    viewsPageView->setExpanding({0, 2});
+    viewsPageView->addPage(componentsList);
+    viewsPageView->addPage(_new<ALabel>("ты лох"));
+    viewsPageView->addPage(_new<ALabel>("ты лох"));
 
     addView(_container<AVerticalLayout>({
         _container<AHorizontalLayout>({
@@ -40,11 +48,11 @@ DesignerWindow::DesignerWindow():
         _container<AHorizontalLayout>({
             // левая колонка с компонентами
             _container<AVerticalLayout>({
-                _new<ALabel>("Компоненты") << ".components_title",
-                componentsList
-            }) let (AViewContainer, {
-                setExpanding({0, 2});
-            }) << ".components",
+                _new<APageSwitch>("Основные представления", 0, viewsPageView),
+                _new<APageSwitch>("Представления моделей", 1, viewsPageView),
+                _new<APageSwitch>("Прочее", 2, viewsPageView),
+            }) << ".components_tabs_wrap",
+            viewsPageView,
 
             // центральная рабочая область
             _container<AStackedLayout>({
