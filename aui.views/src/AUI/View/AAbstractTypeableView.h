@@ -84,6 +84,8 @@ public:
     AAbstractTypeableView();
     virtual ~AAbstractTypeableView();
 
+    AAbstractTypeableView(AAbstractTypeableView&&) = default;
+
     int getContentMinimumHeight() override;
 
     void onKeyDown(AInput::Key key) override;

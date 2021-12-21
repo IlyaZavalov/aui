@@ -75,76 +75,63 @@ inline auto _form(const AVector<std::pair<std::variant<AString, _<AView>>, _<AVi
 }
 
 namespace aui::detail {
-    template<typename Layout>
-    struct container_helper {
+    template<typename Layout, bool expanding>
+    struct container_helper_base {
     private:
         AVector<_<AView>> mViews;
 
+        void processList() {
+
+        }
+        template<typename Arg, typename... Args>
+        void processList(Arg&& arg, Args&&... args) {
+            if constexpr (std::is_base_of_v<AView, Arg>) {
+                mViews.push_back(std::forward<Arg>(arg) >> shared);
+            } else {
+                mViews.push_back(std::forward<Arg>(arg));
+            }
+            processList(std::forward<Args>(args)...);
+        }
+
+        _<AViewContainer> makeContainer() const {
+            auto container = _container<Layout>(mViews);
+            if constexpr(expanding) container->setExpanding();
+            return container;
+        }
     public:
 
-        struct Expanding {
-        private:
-            AVector<_<AView>> mViews;
-
-        public:
-            Expanding(std::initializer_list<_<AView>> views) {
-                mViews.reserve(views.size());
-                for (auto& v : views) {
-                    if (v) {
-                        mViews << v;
-                    }
-                }
-            }
-
-            operator _<AView>() const {
-                return (_container<Layout>(mViews) let {it->setExpanding();});
-            }
-            operator _<AViewContainer>() const {
-                return (_container<Layout>(mViews) let {it->setExpanding();});
-            }
-            _<AViewContainer> operator<<(const AString& assEntry) const {
-                return (_container<Layout>(mViews) let {it->setExpanding();}) << assEntry;
-            }
-            template<typename T>
-            _<AViewContainer> operator^(const T& t) const {
-                return (_container<Layout>(mViews) let {it->setExpanding();}) ^ t;
-            }
-            template<typename T>
-            _<AViewContainer> operator+(const T& t) const {
-                return (_container<Layout>(mViews) let {it->setExpanding();}) + t;
-            }
-        };
-
-
-        container_helper(std::initializer_list<_<AView>> views) {
-            mViews.reserve(views.size());
-            for (auto& v : views) {
-                if (v) {
-                    mViews << v;
-                }
-            }
+        template<typename... Args>
+        container_helper_base(Args&&... views) {
+            mViews.reserve(sizeof...(views));
+            processList(std::forward<Args>(views)...);
         }
         operator _<AView>() const {
-            return _container<Layout>(mViews);
+            return makeContainer();
         }
         operator _<AViewContainer>() const {
-            return _container<Layout>(mViews);
+            return makeContainer();
         }
         _<AViewContainer> operator<<(const AString& assEntry) const {
-            return _container<Layout>(mViews) << assEntry;
+            return makeContainer() << assEntry;
         }
         template<typename T>
         _<AViewContainer> operator^(const T& t) const {
-            return _container<Layout>(mViews) ^ t;
+            return makeContainer() ^ t;
         }
         template<typename T>
         _<AViewContainer> operator+(const T& t) const {
-            return _container<Layout>(mViews) + t;
+            return makeContainer() + t;
         }
 
         _<AViewContainer> operator->() const {
-            return _container<Layout>(mViews);
+            return makeContainer();
         }
+    };
+
+    template<typename Layout>
+    struct container_helper: container_helper_base<Layout, false> {
+        using container_helper_base<Layout, false>::container_helper_base;
+        using Expanding = container_helper_base<Layout, true>;
     };
 }
 

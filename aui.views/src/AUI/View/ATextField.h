@@ -34,6 +34,7 @@ class API_AUI_VIEWS ATextField: public AAbstractTextField
 public:
 	ATextField();
 	~ATextField() override;
+    ATextField(ATextField&&) = default;
 
     void setText2(const AString& t) {setText(t);}
 

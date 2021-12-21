@@ -190,6 +190,8 @@ protected:
 public:
     AView();
     virtual ~AView() = default;
+    AView(AView&&) noexcept = default;
+
 	/**
 	 * \brief Request window manager to redraw this AView.
 	 */

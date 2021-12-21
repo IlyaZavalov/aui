@@ -238,7 +238,7 @@ void AAbstractTypeableView::pasteFromClipboard() {
     mCursorSelection = -1;
 
     invalidatePrerenderedString();
-    emit textChanged;
+    emit textChanged(std::move(getText()));
 }
 
 void AAbstractTypeableView::cutToClipboard() {

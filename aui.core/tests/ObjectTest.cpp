@@ -20,39 +20,22 @@
  */
 
 //
-// Created by alex2 on 6/25/2021.
+// Created by alex2 on 31.08.2020.
 //
 
+#include <boost/test/unit_test.hpp>
+#include <AUI/Common/AObject.h>
 
-#pragma once
+using namespace boost::unit_test;
 
-#include <AUI/View/AView.h>
-#include <AUI/Util/LayoutDirection.h>
-#include <AUI/GL/Vao.h>
+BOOST_AUTO_TEST_SUITE(Object)
 
-class API_AUI_VIEWS ARulerView: public AView {
-private:
-    LayoutDirection mLayoutDirection;
-    _<GL::Vao> mPrecompiledLines;
-
-    int mOffsetPx = 0;
-
-    float mUnit = 1.f;
-
-    int getLongestSide() const;
-    int getShortestSide() const;
-
-public:
-    explicit ARulerView(LayoutDirection layoutDirection);
-    ARulerView(ARulerView&&) = default;
-
-    void render() override;
-
-    void setOffsetPx(int offsetPx) {
-        mOffsetPx = offsetPx;
-        redraw();
+    /**
+     * Checks that AObject move constructor does not break anything.
+     */
+    BOOST_AUTO_TEST_CASE(move) {
+        AObject obj1;
+        AObject obj2 = std::move(obj1);
     }
 
-};
-
-
+BOOST_AUTO_TEST_SUITE_END()

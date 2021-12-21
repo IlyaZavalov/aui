@@ -36,6 +36,7 @@ private:
 
 public:
     explicit APathChooserView(const APath& defaultPath = "");
+    APathChooserView(APathChooserView&&) = default;
 
     void setPath(const APath& path);
     APath getPath() const;

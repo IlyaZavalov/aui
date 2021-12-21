@@ -32,6 +32,7 @@
 class API_AUI_VIEWS ASelectableLabel: public ALabel, public ACursorSelectable {
 public:
     ASelectableLabel();
+    ASelectableLabel(ASelectableLabel&&) = default;
     explicit ASelectableLabel(const AString& text);
 
     [[nodiscard]] AString getText() const override

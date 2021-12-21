@@ -39,6 +39,7 @@ private:
 public:
     ASplitterHelper() = default;
     ASplitterHelper(LayoutDirection direction) : mDirection(direction) {}
+    ASplitterHelper(ASplitterHelper&&) = default;
 
     void setDirection(LayoutDirection direction) {
         mDirection = direction;

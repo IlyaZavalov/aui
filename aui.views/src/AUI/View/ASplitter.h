@@ -39,6 +39,7 @@ private:
     ASplitterHelper mHelper;
 
     ASplitter();
+    ASplitter(ASplitter&&) = default;
 
     template<typename Layout>
     class Builder {

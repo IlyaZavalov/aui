@@ -43,6 +43,7 @@ private:
 
 public:
     ATextArea();
+    ATextArea(ATextArea&&) = default;
     explicit ATextArea(const AString& text);
 
     int getContentMinimumHeight() override;

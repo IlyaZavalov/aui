@@ -36,6 +36,7 @@ private:
 
 public:
     APageSwitch(const AString& text, unsigned pageNumber, const _<APageView>& pageView);
+    APageSwitch(APageSwitch&&) = default;
 
     void getCustomCssAttributes(AMap<AString, AVariant>& map) override;
 

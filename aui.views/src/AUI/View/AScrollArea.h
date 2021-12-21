@@ -40,6 +40,7 @@ private:
 public:
     AScrollArea();
     virtual ~AScrollArea();
+    AScrollArea(AScrollArea&&) = default;
 
     _<AViewContainer> getContentContainer() const;
     int getContentMinimumHeight() override;

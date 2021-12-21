@@ -33,6 +33,7 @@ public:
 		setExpanding({ w, h });
 	}
 	virtual ~ASpacer() = default;
+    ASpacer(ASpacer&&) = default;
 
     void setMinimumSize(const glm::ivec2& minimumSize) {
         mMinimumSize = minimumSize;

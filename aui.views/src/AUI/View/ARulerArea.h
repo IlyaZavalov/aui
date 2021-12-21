@@ -19,6 +19,7 @@ protected:
 
 public:
     ARulerArea(const _<AView>& wrappedView);
+    ARulerArea(ARulerArea&&) = default;
     void setSize(int width, int height) override;
     void onMouseMove(glm::ivec2 pos) override;
     void render() override;

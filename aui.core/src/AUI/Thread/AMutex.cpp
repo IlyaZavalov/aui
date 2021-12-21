@@ -20,3 +20,13 @@
  */
 
 #include "AMutex.h"
+
+APool<std::mutex> AMutex::ourMutexPool([] { return new std::mutex; });
+
+AMutex::AMutex(): mImpl(ourMutexPool.getUnique()) {
+
+}
+
+AMutex::~AMutex() {
+
+}

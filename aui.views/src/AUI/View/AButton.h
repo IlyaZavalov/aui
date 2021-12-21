@@ -33,6 +33,7 @@ class API_AUI_VIEWS AButton: public ALabel
 {	
 public:
 	AButton();
+    AButton(AButton&&) = default;
 	explicit AButton(const AString& text);
 	virtual ~AButton() = default;
 

@@ -24,6 +24,8 @@ APath saveScreenshot(const AString& testFilePath, const AString& name) {
 void UITestCaseScope::test_unit_aborted(const test_unit& unit) {
     test_observer::test_unit_aborted(unit);
 
+    if (!AWindow::current()) return;
+
     // draw red rects to highlight views
     for (auto& v : Matcher::current()->toSet()) {
         Render::drawRectBorder(ASolidBrush{ 0xaae00000_argb },
@@ -42,6 +44,8 @@ void UITestCaseScope::test_unit_aborted(const test_unit& unit) {
 
 void UITestCaseScope::test_unit_finish(const test_unit& unit, unsigned long i) {
     test_observer::test_unit_finish(unit, i);
+
+    if (!AWindow::current()) return;
 
     auto name = std::string(unit.p_file_name.begin(),  unit.p_file_name.end());
     auto p = saveScreenshot(name, "finish-{}_{}.png"_format(unit.p_name->c_str(), unit.p_line_num));

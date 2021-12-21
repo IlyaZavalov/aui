@@ -40,7 +40,7 @@ private:
 	AString mText;
 	_<IDrawable> mIcon;
     _<AFont> mFontOverride;
-    uint8_t mFontSizeOverride = 0;
+    uint16_t mFontSizeOverride = 0;
     VerticalAlign mVerticalAlign = VerticalAlign::DEFAULT;
     TextTransform mTextTransform = TextTransform::NONE;
     AColor mIconColor = {1, 1, 1, 1};
@@ -65,6 +65,7 @@ protected:
 public:
 	ALabel();
 	explicit ALabel(const AString& text);
+    ALabel(ALabel&&) = default;
 
 	void render() override;
     void doRenderText();

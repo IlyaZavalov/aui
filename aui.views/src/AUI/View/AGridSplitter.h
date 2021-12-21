@@ -52,6 +52,7 @@ private:
     AGridSplitter();
 
 public:
+    AGridSplitter(AGridSplitter&&) = default;
     void updateSplitterItems();
 
     void onMousePressed(glm::ivec2 pos, AInput::Key button) override;

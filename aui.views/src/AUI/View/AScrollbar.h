@@ -91,6 +91,7 @@ private:
 public:
 
     explicit AScrollbar(LayoutDirection direction = LayoutDirection::VERTICAL);
+    AScrollbar(AScrollbar&&) = default;
 
     [[nodiscard]] int getCurrentScroll() const {
         return mCurrentScroll;

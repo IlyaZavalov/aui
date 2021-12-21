@@ -46,6 +46,7 @@ public:
     explicit AComboBox(const _<IListModel<AString>>& model);
     AComboBox();
     ~AComboBox() override;
+    AComboBox(AComboBox&&) = default;
 
     void setModel(const _<IListModel<AString>>& model);
     void render() override;

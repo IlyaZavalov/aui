@@ -46,6 +46,7 @@ private:
 	
 public:
     AListView(): AListView(nullptr) {}
+    AListView(AListView&&) = default;
 	explicit AListView(const _<IListModel<AString>>& model);
     virtual ~AListView();
 

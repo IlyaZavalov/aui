@@ -46,6 +46,22 @@ namespace uitest::impl {
             return current == *value;
         }
     };
+
+    template<ASide lhs, ASide rhs, typename Comparator>
+    struct positional {
+        Matcher other;
+
+        positional(const Matcher& other) : other(other) {}
+
+        bool operator()(const _<AView>& v) {
+            int l = side_value<lhs>{}(v);
+            for (auto& view : other.toSet()) {
+                int r = side_value<rhs>{}(view);
+                if (!Comparator{}(l, r)) return false;
+            }
+            return true;
+        }
+    };
 }
 
 using leftAligned = uitest::impl::align<ASide::LEFT>;
@@ -55,3 +71,6 @@ using bottomAligned = uitest::impl::align<ASide::BOTTOM>;
 
 using leftRightAligned = uitest::impl::both<uitest::impl::align<ASide::LEFT>, uitest::impl::align<ASide::RIGHT>>;
 using topBottomAligned = uitest::impl::both<uitest::impl::align<ASide::TOP>, uitest::impl::align<ASide::BOTTOM>>;
+
+using below = uitest::impl::positional<ASide::TOP, ASide::BOTTOM, std::greater<>>;
+using above = uitest::impl::positional<ASide::BOTTOM, ASide::TOP, std::less<>>;

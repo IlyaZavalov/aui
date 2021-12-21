@@ -61,6 +61,8 @@ public:
 	AAbstractTextField();
 	virtual ~AAbstractTextField();
 
+    AAbstractTextField(AAbstractTextField&&) = default;
+
 	int getContentMinimumHeight() override;
 	void setText(const AString& t) override;
 

@@ -32,6 +32,7 @@ class API_AUI_VIEWS ADividerView: public AView {
 public:
     ADividerView();
     ~ADividerView() override;
+    ADividerView(ADividerView&&) = default;
 
     bool consumesClick(const glm::ivec2& pos) override;
 };

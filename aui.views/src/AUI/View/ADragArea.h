@@ -37,6 +37,7 @@ private:
     void setValidPositionFor(const _<AView>& targetView, const glm::ivec2& newPosition);
 public:
     ADragArea();
+    ADragArea(ADragArea&&) = default;
     void startDragging(AViewContainer* container);
     void handleMouseMove();
 

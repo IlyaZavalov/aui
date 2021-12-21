@@ -36,6 +36,7 @@ private:
 
 public:
     explicit ARadioGroup(const _<IListModel<AString>>& model);
+    ARadioGroup(ARadioGroup&&) = default;
     ARadioGroup();
     ~ARadioGroup() override;
 

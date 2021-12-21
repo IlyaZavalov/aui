@@ -32,6 +32,7 @@ class API_AUI_VIEWS AVDividerView: public ADividerView {
 public:
     AVDividerView();
     ~AVDividerView() override;
+    AVDividerView(AVDividerView&&) = default;
 };
 
 

@@ -72,6 +72,8 @@ protected:
 
 public:
 	AViewContainer();
+    AViewContainer(AViewContainer&&) = default;
+
 	virtual ~AViewContainer();
 	void addView(const _<AView>& view);
 	void addView(size_t index, const _<AView>& view);

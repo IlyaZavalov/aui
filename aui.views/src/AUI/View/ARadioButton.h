@@ -47,6 +47,7 @@ private:
 public:
     ARadioButton();
     ARadioButton(const AString& text);
+    ARadioButton(ARadioButton&&) = default;
 
     virtual ~ARadioButton();
 

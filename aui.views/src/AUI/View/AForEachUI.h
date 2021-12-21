@@ -24,6 +24,7 @@ public:
         setLayout(_new<Layout>());
         setModel(list);
     }
+    AForEachUI(AForEachUI&&) = default;
 
     void setModel(const List& list) {
         mObserver->setModel(list);

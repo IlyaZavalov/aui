@@ -65,6 +65,7 @@ private:
 
 public:
     ATabView();
+    ATabView(ATabView&&) = default;
 
     void addTab(const _<AView>& view, const AString& name = {});
     void setTabId(unsigned tabId);

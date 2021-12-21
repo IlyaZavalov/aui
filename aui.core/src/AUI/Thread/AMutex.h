@@ -21,9 +21,32 @@
 
 #pragma once
 #include <mutex>
+#include <AUI/Util/APool.h>
 
-class AMutex: public std::mutex
+class API_AUI_CORE AMutex
 {
+private:
+    static APool<std::mutex> ourMutexPool;
+
+    decltype(ourMutexPool)::UniquePtr mImpl;
+
 public:
-	
+	AMutex();
+    ~AMutex();
+
+    explicit AMutex(AMutex&& other): mImpl(std::move(other.mImpl)) {}
+
+    void lock() {
+        if (mImpl) mImpl->lock();
+    }
+
+    void unlock() {
+        if (mImpl) mImpl->unlock();
+    }
+
+    [[nodiscard]]
+    bool try_lock() {
+        if (mImpl) return mImpl->try_lock();
+        return false;
+    }
 };

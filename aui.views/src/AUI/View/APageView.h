@@ -34,6 +34,7 @@ private:
 
 public:
     APageView();
+    APageView(APageView&&) = default;
 
     void addPage(const _<AView>& view);
     void setPageId(unsigned int pageId);

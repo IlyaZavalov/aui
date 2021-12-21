@@ -34,6 +34,7 @@ private:
 
 public:
     ADrawableView(const _<IDrawable>& drawable);
+    ADrawableView(ADrawableView&&) = default;
     void render() override;
 
     void setDrawable(const _<IDrawable>& drawable) {

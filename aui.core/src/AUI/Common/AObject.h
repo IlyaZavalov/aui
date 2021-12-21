@@ -49,6 +49,8 @@ public:
 	AObject();
 	virtual ~AObject();
 
+    AObject(AObject&&) noexcept = default;
+
 	void clearSignals();
 
     /**
@@ -113,7 +115,7 @@ public:
 	}
 
     template<typename T>
-	void operator^(T& t) {
+	void operator^(T&& t) {
 	    if (mSignalsEnabled) {
 	        t.invokeSignal();
 	    }
